@@ -23,5 +23,5 @@ public class Room
     [IgnoreDataMember]
     public List<long>? Tags;
     [IgnoreDataMember]
-    public FormFile? ImageFile;
+    public IFormFile? ImageFile;
 }

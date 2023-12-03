@@ -21,7 +21,7 @@ namespace TodoApi.Controllers
         }
 
         // GET: api/Tag
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<ActionResult<IEnumerable<Tag>>> GetTag()
         {
             return await _context.Tag.ToListAsync();

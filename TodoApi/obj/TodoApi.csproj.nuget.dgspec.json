@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj": {}
+    "d:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj": {}
   },
   "projects": {
-    "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj": {
+    "d:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj",
+        "projectUniqueName": "d:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj",
         "projectName": "TodoApi",
-        "projectPath": "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj",
+        "projectPath": "d:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj",
         "packagesPath": "C:\\Users\\yu\\.nuget\\packages\\",
-        "outputPath": "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\obj\\",
+        "outputPath": "d:\\Cong\\Space\\dotnet-hotel\\TodoApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\yu\\AppData\\Roaming\\NuGet\\NuGet.Config",

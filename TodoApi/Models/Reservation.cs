@@ -9,4 +9,6 @@ public class Reservation
     public string? BookingDate { get; set; }
     public string? ModificationDate { get; set; }
     public string? CancellationDate { get; set; }
+    public string? Status { get; set; }
+
 }

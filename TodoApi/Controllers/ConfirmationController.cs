@@ -85,7 +85,7 @@ namespace TodoApi.Controllers
 
         // POST: api/Confirmation
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("generateConfirmation")]
         public async Task<ActionResult<Confirmation>> generateConfirmation()
         {
 

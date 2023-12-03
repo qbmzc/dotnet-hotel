@@ -21,37 +21,35 @@ namespace TodoApi.Controllers
         }
 
         // GET: api/Room
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Room>>> GetRoom()
+        [HttpGet("list")]
+        public async Task<ActionResult<APIResponse<IEnumerable<Room>>>> GetRoom()
         {
-            return await _context.Room.ToListAsync();
+            List<Room> rooms = await _context.Room.ToListAsync();
+
+            return Ok(new APIResponse<IEnumerable<Room>> { Data = rooms });
         }
 
         // GET: api/Room/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Room>> GetRoom(long id)
+        [HttpGet("detail")]
+        public async Task<ActionResult<APIResponse<Room>>> GetRoom(long id)
         {
-            var Room = await _context.Room.FindAsync(id);
+            var room = await _context.Room.FindAsync(id);
 
-            if (Room == null)
+            if (room == null)
             {
-                return NotFound();
+                    return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
             }
 
-            return Room;
+            return Ok(new APIResponse<Room> { Data = room });
         }
 
         // PUT: api/Room/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoom(long id, Room Room)
+        [HttpPost("update")]
+        public async Task<ActionResult<APIResponse<Room>>> PutRoom(Room room)
         {
-            if (id != Room.Id)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(Room).State = EntityState.Modified;
+            _context.Entry(room).State = EntityState.Modified;
 
             try
             {
@@ -59,9 +57,9 @@ namespace TodoApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RoomExists(id))
+                if (!RoomExists(room.Id))
                 {
-                    return NotFound();
+                    return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
                 }
                 else
                 {
@@ -69,34 +67,49 @@ namespace TodoApi.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(new APIResponse<Room> { });
         }
 
         // POST: api/Room
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Room>> PostRoom(Room Room)
+        [HttpPost("create")]
+        public async Task<ActionResult<APIResponse<Room>>> PostRoom(Room room, IFormFile file)
         {
-            _context.Room.Add(Room);
+            if (file != null && file.Length > 0)
+            {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", file.FileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                room.Cover = file.FileName;
+            }
+            _context.Room.Add(room);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRoom", new { id = Room.Id }, Room);
+            return Ok(new APIResponse<Room> { Data=room});
         }
 
         // DELETE: api/Room/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRoom(long id)
+        [HttpPost("delete")]
+        public async Task<ActionResult<APIResponse<Room>>> DeleteRoom(string ids)
         {
-            var Room = await _context.Room.FindAsync(id);
-            if (Room == null)
+            string[] strings = ids.Split(",");
+            for (int i = 0; i < strings.Length; i++)
             {
-                return NotFound();
+                var Room = await _context.Room.FindAsync(ids[i]);
+                if (Room == null)
+                {
+                    return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
+
+                }
+
+                _context.Room.Remove(Room);
             }
 
-            _context.Room.Remove(Room);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new APIResponse<Room> { });
         }
 
         private bool RoomExists(long id)

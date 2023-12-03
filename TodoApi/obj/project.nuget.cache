@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4cLuFSk7MaTVeac0PMSyxJUC8DwLsynzPnAQKJW4bUiQg2ML7dlCOnxyh/jW88Wy40af98Y7tqWbLbtm2Ts/MQ==",
+  "dgSpecHash": "eXMsYk80dQ/oBhdjC44MqKQ80IXyHsZ1hR/cHb8YAXH56ghkRmhqRt8AjZdJl1QRJt2Wp+QS4w92NFbeEOL3lg==",
   "success": true,
-  "projectFilePath": "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj",
+  "projectFilePath": "d:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\yu\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\yu\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

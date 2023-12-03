@@ -1,10 +1,21 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Models;
+using Microsoft.Extensions.Logging;
+
 using Microsoft.EntityFrameworkCore.SqlServer;
 var builder = WebApplication.CreateBuilder(args);
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://127.0.0.1:3000")
+                                              .AllowAnyHeader();
+                      });
+});
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<TodoContext>(opt =>
@@ -21,6 +32,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 

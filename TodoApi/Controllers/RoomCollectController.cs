@@ -35,7 +35,7 @@ namespace TodoApi.Controllers
 
             if (RoomCollect == null)
             {
-                return NotFound();
+                    return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
             }
 
             return RoomCollect;
@@ -48,7 +48,7 @@ namespace TodoApi.Controllers
         {
             if (id != RoomCollect.Id)
             {
-                return BadRequest();
+                    return Ok(new APIResponse<Room> { Code = 405, Msg = "id is null" });
             }
 
             _context.Entry(RoomCollect).State = EntityState.Modified;
@@ -61,7 +61,7 @@ namespace TodoApi.Controllers
             {
                 if (!RoomCollectExists(id))
                 {
-                    return NotFound();
+                    return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
                 }
                 else
                 {

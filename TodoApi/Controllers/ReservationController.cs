@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using TodoApi.Models;
 
 namespace TodoApi.Controllers
+//预订
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -21,24 +22,38 @@ namespace TodoApi.Controllers
         }
 
         // GET: api/Reservation
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservation()
+        [HttpGet("list")]
+        public async Task<ActionResult<APIResponse<IEnumerable<Reservation>>>> GetReservation()
         {
-            return await _context.Reservation.ToListAsync();
+            List<Reservation> reservations = await _context.Reservation.ToListAsync();
+
+            return Ok(new APIResponse<IEnumerable<Reservation>> { Data = reservations });
+        }
+
+        // GET: api/Reservation
+        [HttpGet("userOrderList")]
+        public async Task<ActionResult<APIResponse<IEnumerable<Reservation>>>> UserOrderList([FromQuery] string userId,
+        [FromQuery] string status)
+        {
+
+            List<Reservation> reservations = await _context.Reservation.Where(r => r.UserId == userId && r.Status == status).ToListAsync();
+
+            return Ok(new APIResponse<IEnumerable<Reservation>> { Data = reservations });
         }
 
         // GET: api/Reservation/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Reservation>> GetReservation(long id)
+        public async Task<ActionResult<APIResponse<Reservation>>> GetReservation(long id)
         {
             var reservation = await _context.Reservation.FindAsync(id);
 
             if (reservation == null)
             {
-                return NotFound();
+                    return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
             }
 
-            return reservation;
+            return Ok(new APIResponse<Reservation>() { });
+
         }
 
         // PUT: api/Reservation/5
@@ -84,8 +99,8 @@ namespace TodoApi.Controllers
         }
 
         // DELETE: api/Reservation/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReservation(long id)
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteReservation(string ids)
         {
             var reservation = await _context.Reservation.FindAsync(id);
             if (reservation == null)
