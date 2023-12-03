@@ -34,7 +34,7 @@
           <div v-for="item in contentData.pageData" :key="item.id" @click="handleDetail(item)"
                class="thing-item item-column-3"><!---->
             <div class="img-view">
-              <img :src="item.cover"></div>
+              <img :src="'data:image/jpeg;base64,'+item.cover"></div>
             <div class="info-view">
               <h3 class="thing-name">{{ item.title.substring(0, 12) }}</h3>
               <span>
@@ -155,7 +155,8 @@ const getThingList = (data) => {
     contentData.loading = false
     res.data.forEach((item, index) => {
       if (item.cover) {
-        item.cover = BASE_URL + '/api/staticfiles/image/' +  item.cover
+        // item.cover = BASE_URL + '/api/staticfiles/image/' +  item.cover
+        item.cover =  item.cover
       }
     })
     console.log(res)

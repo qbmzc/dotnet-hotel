@@ -49,7 +49,7 @@ namespace TodoApi.Controllers
 
             if (reservation == null)
             {
-                    return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
+                return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
             }
 
             return Ok(new APIResponse<Reservation>() { });
@@ -89,7 +89,7 @@ namespace TodoApi.Controllers
 
         // POST: api/Reservation
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {
             _context.Reservation.Add(reservation);
@@ -100,18 +100,22 @@ namespace TodoApi.Controllers
 
         // DELETE: api/Reservation/5
         [HttpPost("delete")]
-        public async Task<IActionResult> DeleteReservation(string ids)
+        public async Task<ActionResult<APIResponse<Reservation>>> DeleteReservation(string ids)
         {
-            var reservation = await _context.Reservation.FindAsync(id);
-            if (reservation == null)
+            string[] strings = ids.Split(",");
+            for (int i = 0; i < strings.Length; i++)
             {
-                return NotFound();
+                var Room = await _context.Room.FindAsync(ids[i]);
+                if (Room == null)
+                {
+                    return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
+
+                }
+
+                _context.Room.Remove(Room);
             }
 
-            _context.Reservation.Remove(reservation);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(new APIResponse<Reservation>() { });
         }
 
         private bool ReservationExists(long id)

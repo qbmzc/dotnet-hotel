@@ -37,7 +37,7 @@ namespace TodoApi.Controllers
 
             if (room == null)
             {
-                    return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
+                return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
             }
 
             return Ok(new APIResponse<Room> { Data = room });
@@ -73,21 +73,65 @@ namespace TodoApi.Controllers
         // POST: api/Room
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("create")]
-        public async Task<ActionResult<APIResponse<Room>>> PostRoom(Room room, IFormFile file)
+        public async Task<ActionResult<APIResponse<Room>>> PostRoom([FromForm] Room room, IFormFile file)
         {
+
             if (file != null && file.Length > 0)
             {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", file.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (file.FileName.EndsWith(".jpg") || file.FileName.EndsWith(".jpeg")||file.FileName.EndsWith(".png"))
                 {
-                    await file.CopyToAsync(stream);
+                    string v = await GetBase64StringAsync(file);
+                    room.Cover = v;
+                }else{
+                    return Ok(new APIResponse<Room>(){Code=400,Msg="Format not supported"});
                 }
-                room.Cover = file.FileName;
+
             }
             _context.Room.Add(room);
             await _context.SaveChangesAsync();
 
-            return Ok(new APIResponse<Room> { Data=room});
+            return Ok(new APIResponse<Room> { Data = room });
+        }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> SaveImage(IFormFile image)
+        {
+            if (image == null || image.Length == 0)
+            {
+                return BadRequest("请选择一个图片文件");
+            }
+
+            // 将图片文件转换为base64字符串
+            var base64String = await GetBase64StringAsync(image);
+
+            // 将base64字符串保存到数据库中
+            var result = await SaveBase64StringToDatabase(base64String);
+
+            if (result)
+            {
+                return Ok("图片上传成功");
+            }
+            else
+            {
+                return BadRequest("图片上传失败");
+            }
+        }
+        //将图片文件转换成base64字符串
+        private async Task<string> GetBase64StringAsync(IFormFile image)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await image.CopyToAsync(memoryStream);
+                return Convert.ToBase64String(memoryStream.ToArray());
+            }
+        }
+
+        private async Task<bool> SaveBase64StringToDatabase(string base64String)
+        {
+            Console.WriteLine(base64String);
+            // 这里需要根据实际情况编写将base64字符串保存到数据库的逻辑
+            // 例如，使用Entity Framework或其他ORM框架将数据插入到数据库中
+            return true; // 返回true表示保存成功，返回false表示保存失败
         }
 
         // DELETE: api/Room/5

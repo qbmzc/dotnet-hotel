@@ -93,7 +93,7 @@ namespace TodoApi.Controllers
         }
         //后台用户登录
         [HttpPost("login")]
-        public async Task<ActionResult<APIResponse<User>>> Login(User user)
+        public async Task<ActionResult<APIResponse<User>>> Login([FromForm] User user)
         {
             if (user.Username == null || user.Password == null)
             {
@@ -101,8 +101,7 @@ namespace TodoApi.Controllers
             }
             string encryptPwd = EncryptUtils.Encrypt(user.Password);
             user.Password = encryptPwd;
-            var responseUser = await _context.User.FindAsync(user);
-
+            User responseUser = await _context.User.FirstOrDefaultAsync(u => u.Username == user.Username && u.Password == encryptPwd);
             if (responseUser == null)
             {
                 return Ok(new APIResponse<User> { Code = 404, Msg = "user is not found" });
@@ -144,10 +143,15 @@ namespace TodoApi.Controllers
         [HttpPost("create")]
         public async Task<ActionResult<APIResponse<User>>> PostUser(User user)
         {
+
+            string encryptPwd = EncryptUtils.Encrypt(user.Password);
+            user.Password = encryptPwd;
+            user.Token = encryptPwd;
+            user.Status = "0";
             _context.User.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("Get", new { id = user.Id }, user);
+            return Ok(new APIResponse<User>() { Data = user });
         }
 
         //创建管理员
@@ -226,7 +230,7 @@ namespace TodoApi.Controllers
             _context.User.Add(user);
             await _context.SaveChangesAsync();
             user.Password = null;
-            user.RePassword=null;
+            user.RePassword = null;
             return Ok(new APIResponse<User> { Data = user });
 
         }

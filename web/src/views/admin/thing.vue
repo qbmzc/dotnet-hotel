@@ -90,7 +90,7 @@
                   >
                     <p class="ant-upload-drag-icon">
                       <template v-if="modal.form.coverUrl">
-                        <img :src="modal.form.coverUrl"  style="width: 60px;height: 80px;"/>
+                        <img :src="'data:image/jpeg;base64,'+modal.form.coverUrl"  style="width: 60px;height: 80px;"/>
                       </template>
                       <template v-else>
                         <file-image-outlined />
@@ -339,8 +339,12 @@ const handleEdit = (record: any) => {
       modal.form[key] = record[key];
     }
   }
-  if(modal.form.cover) {
-    modal.form.coverUrl = BASE_URL + '/api/staticfiles/image/' + modal.form.cover
+//  if(modal.form.cover) {
+  //  modal.form.coverUrl = BASE_URL + '/api/staticfiles/image/' + modal.form.cover
+    //modal.form.cover = undefined
+ // }
+   if(modal.form.cover) {
+    modal.form.coverUrl = modal.form.cover
     modal.form.cover = undefined
   }
 };

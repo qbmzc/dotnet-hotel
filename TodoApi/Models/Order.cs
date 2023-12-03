@@ -9,7 +9,7 @@ public class Order
     public string? OrderTime { get; set; }
     public string? PayTime { get; set; }
     public string? UserId { get; set; }
-    public string? ThingId { get; set; }
+    public string? RoomId { get; set; }
     public string? Count { get; set; }
     public string? OrderNumber { get; set; }
     public string? ReceiverAddress { get; set; }

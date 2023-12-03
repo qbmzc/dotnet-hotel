@@ -43,12 +43,12 @@ namespace TodoApi.Controllers
 
         // PUT: api/Order/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(long id, Order order)
+        [HttpPost("update")]
+        public async Task<ActionResult<APIResponse<Order>>> PutOrder(Order order)
         {
-            if (id != order.Id)
+            if (0 == order.Id)
             {
-                return BadRequest();
+                return Ok(new APIResponse<Order> { Code = 403, Msg = "order id is null" });
             }
 
             _context.Entry(order).State = EntityState.Modified;
@@ -59,9 +59,9 @@ namespace TodoApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!OrderExists(id))
+                if (!OrderExists(order.Id))
                 {
-                    return NotFound();
+                    return Ok(new APIResponse<Order> { Code = 404, Msg = "Not Found" });
                 }
                 else
                 {
@@ -72,31 +72,111 @@ namespace TodoApi.Controllers
             return NoContent();
         }
 
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("cancelOrder")]
+        public async Task<ActionResult<APIResponse<Order>>> CancelOrder(long id)
+        {
+            if (0 == id)
+            {
+                return Ok(new APIResponse<Order> { Code = 403, Msg = "order id is null" });
+            }
+
+            Order? order = await _context.Order.FindAsync(id);
+            if (null == order)
+            {
+                return Ok(new APIResponse<Order> { Code = 403, Msg = "order is null" });
+
+            }
+
+            order.Status="7";//7 cancel
+            _context.Entry(order).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OrderExists(order.Id))
+                {
+                    return Ok(new APIResponse<Order> { Code = 404, Msg = "Not Found" });
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+                return Ok(new APIResponse<Order> {  Msg = "order is canceled" });
+        }
+
+         [HttpPost("cancelUserOrder")]
+        public async Task<ActionResult<APIResponse<Order>>> CancelUserOrder(long id)
+        {
+            if (0 == id)
+            {
+                return Ok(new APIResponse<Order> { Code = 403, Msg = "order id is null" });
+            }
+
+            Order? order = await _context.Order.FindAsync(id);
+            if (null == order)
+            {
+                return Ok(new APIResponse<Order> { Code = 403, Msg = "order is null" });
+
+            }
+
+            order.Status="7";//7 cancel
+            _context.Entry(order).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OrderExists(order.Id))
+                {
+                    return Ok(new APIResponse<Order> { Code = 404, Msg = "Not Found" });
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+                return Ok(new APIResponse<Order> {  Msg = "order is canceled" });
+        }
+
         // POST: api/Order
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
+        [HttpPost("create")]
+        public async Task<ActionResult<APIResponse<Order>>> PostOrder([FromForm] Order order)
         {
+            order.Status = "1";
+            order.OrderTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            order.OrderNumber = Guid.NewGuid().ToString();
             _context.Order.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
+            var orderw = _context.Order.Find(order.Id);
+            // return CreatedAtAction("GetOrder", new { id = order.Id }, order);
+            return Ok(new APIResponse<Order>() { Data = orderw });
         }
 
         // DELETE: api/Order/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrder(long id)
+        public async Task<ActionResult<APIResponse<Order>>> DeleteOrder(long id)
         {
             var order = await _context.Order.FindAsync(id);
             if (order == null)
             {
-                return NotFound();
+                return Ok(new APIResponse<Order>() { Msg = "Not Found", Code = 404 });
             }
 
             _context.Order.Remove(order);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new APIResponse<Order>() { });
         }
 
         private bool OrderExists(long id)
