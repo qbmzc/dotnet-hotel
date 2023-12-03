@@ -20,13 +20,15 @@ namespace TodoApi.Controllers
             _context = context;
         }
 
-        // GET: api/Classification
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Classification>>> GetClassification()
+        
+        // GET: api/Room
+        [HttpGet("list")]
+        public async Task<ActionResult<APIResponse<IEnumerable<Classification>>>> GetClassification()
         {
-            return await _context.Classification.ToListAsync();
-        }
+            List<Classification> classifications = await _context.Classification.ToListAsync();
 
+            return Ok(new APIResponse<IEnumerable<Classification>> { Data = classifications });
+        }
         // GET: api/Classification/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Classification>> GetClassification(long id)
