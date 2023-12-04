@@ -3,15 +3,15 @@
 
     <div class="tel-regist-page pc-style">
       <div class="regist-title">
-        <span>注册新账号</span>
-        <span @click="router.push({name:'login'})" class="toWxLogin">我要登录</span>
+        <span>Registration</span>
+        <span @click="router.push({ name: 'login' })" class="toWxLogin">Login</span>
       </div>
 
       <div class="regist-padding">
         <div class="common-input">
           <img :src="MailIcon" class="left-icon">
           <div class="input-view">
-            <input placeholder="请输入邮箱" v-model="tData.loginForm.username" type="text" class="input">
+            <input placeholder="e-mail" v-model="tData.loginForm.username" type="text" class="input">
             <p class="err-view">
             </p>
           </div>
@@ -21,7 +21,7 @@
         <div class="common-input">
           <img :src="PwdIcon" class="left-icon">
           <div class="input-view">
-            <input placeholder="请输入密码" v-model="tData.loginForm.password" type="password" class="input">
+            <input placeholder="password" v-model="tData.loginForm.password" type="password" class="input">
             <p class="err-view">
             </p>
           </div>
@@ -31,7 +31,37 @@
         <div class="common-input">
           <img :src="PwdIcon" class="left-icon">
           <div class="input-view">
-            <input placeholder="请再次输入密码" v-model="tData.loginForm.repassword" type="password" class="input">
+            <input placeholder="Please enter your password again" v-model="tData.loginForm.repassword" type="password"
+              class="input">
+            <p class="err-view">
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="regist-padding">
+        <div class="common-input">
+          <img :src="CountryIcon" class="left-icon">
+          <div class="input-view">
+            <select v-model="tData.loginForm.country" class="input">
+              <option value="USA" default>USA</option>
+              <option value="Canada">Canada</option>
+              <option value="UK">UK</option>
+              <option value="China">China</option>
+              <option value="Japan">Japan</option>
+            </select>
+            <p class="err-view">
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="regist-padding">
+        <div class="common-input">
+          <img :src="TelIcon" class="left-icon">
+          <div class="input-view">
+            <!-- <input placeholder="" 
+            v-model="tData.loginForm.phoneNumber" type="text" class="input"> -->
+            <TelPhone v-model:phonePrefix="tData.loginForm.phonePrefix"
+              v-model:phoneNumber="tData.loginForm.phoneNumber" />
             <p class="err-view">
             </p>
           </div>
@@ -39,7 +69,7 @@
       </div>
       <div class="tel-login">
         <div class="next-btn-view">
-          <button class="next-btn" @click="handleRegister">注册</button>
+          <button class="next-btn" @click="handleRegister">Regist</button>
         </div>
       </div>
     </div>
@@ -47,39 +77,66 @@
 </template>
 
 <script setup lang="ts">
-import {userRegisterApi} from '/@/api/user'
-import {message} from "ant-design-vue";
+import { userRegisterApi } from '/@/api/user'
+import { message } from "ant-design-vue";
 import MailIcon from '/@/assets/images/mail-icon.svg';
 import PwdIcon from '/@/assets/images/pwd-icon.svg';
-
+import TelIcon from '/@/assets/images/tel-icon.svg';
+import CountryIcon from '/@/assets/images/location.svg';
+import TelPhone from "./telphone.vue";
+import { watch, ref } from "vue";
 const router = useRouter();
 
 const tData = reactive({
   loginForm: {
     username: '',
     password: '',
-    repassword: ''
+    repassword: '',
+    country: ref(''),
+    phoneNumber: '',
+    country_codes: {
+      "China": "+86",
+      "USA": "+1",
+      "UK": "+44",
+      "Japan": "+81",
+      "Canda": "+1",
+    },
+    phonePrefix: ref(''),
   }
 })
 
+var country = tData.loginForm.country; // 获取国家代码
+const countryCode = tData.loginForm.country_codes[country]; // 获取国家代码
+tData.loginForm.phonePrefix = countryCode; // 获取电话号码
 const handleRegister = () => {
   console.log('login')
-  if(tData.loginForm.username === ''
+  if (tData.loginForm.username === ''
     || tData.loginForm.password === ''
-    || tData.loginForm.repassword === ''){
-    message.warn('不能为空！')
+    || tData.loginForm.repassword === '') {
+    message.warn('Not null！')
+    return;
+  }
+
+  const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/; // 添加电话号码正则表达式
+  const countryCode = tData.loginForm.country_codes[country]; // 获取国家代码
+  tData.loginForm.phonePrefix = countryCode; // 获取电话号码
+  const phoneNumber = tData.loginForm.phoneNumber; // 获取电话号码
+  if (!phoneNumber || !phoneRegex.test(phoneNumber)) { // 验证电话号码格式
+    message.warn('Invalid phone number format！');
     return;
   }
 
   userRegisterApi({
     username: tData.loginForm.username,
     password: tData.loginForm.password,
-    rePassword: tData.loginForm.repassword
+    rePassword: tData.loginForm.repassword,
+    phoneNumber: tData.loginForm.phoneNumber, // 添加电话号码到请求参数中
+    countryCode: tData.loginForm.country // 添加国家代码到请求参数中
   }).then(res => {
-    message.success('注册成功！')
-    router.push({name: 'login'})
+    message.success('success！')
+    router.push({ name: 'login' })
   }).catch(err => {
-    message.error(err.msg || '注册失败')
+    message.error(err.msg || 'failed')
   })
 }
 
@@ -91,11 +148,16 @@ div {
   display: block;
 }
 
-*, :after, :before, img {
+*,
+:after,
+:before,
+img {
   border-style: none;
 }
 
-*, :after, :before {
+*,
+:after,
+:before {
   border-width: 0;
   border-color: #dae1e7;
 }
@@ -108,9 +170,9 @@ div {
   object-fit: cover;
   height: 100vh;
   overflow: hidden;
-  display:flex;
+  display: flex;
   justify-content: center;
-  align-items:center;
+  align-items: center;
 }
 
 .pc-style {
@@ -206,5 +268,4 @@ div {
   outline: none;
   cursor: pointer;
 }
-
 </style>

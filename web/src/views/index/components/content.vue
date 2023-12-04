@@ -2,12 +2,12 @@
   <div class="content">
     <div class="content-left">
       <div class="left-search-item">
-        <h4>房型分类</h4>
+        <h4>RoomTypeClassify</h4>
         <a-tree :tree-data="contentData.cData" :selected-keys="contentData.selectedKeys" @select="onSelect"
                 style="min-height: 220px;">
         </a-tree>
       </div>
-      <div class="left-search-item"><h4>热门标签</h4>
+      <div class="left-search-item"><h4>Hot Label</h4>
         <div class="tag-view tag-flex-view">
             <span class="tag" :class="{'tag-select': contentData.selectTagId===item.id}"
                   v-for="item in contentData.tagData" :key="item.id"
@@ -43,7 +43,7 @@
               </span>
             </div>
           </div>
-          <div v-if="contentData.pageData.length <= 0 && !contentData.loading" class="no-data" style="">暂无数据</div>
+          <div v-if="contentData.pageData.length <= 0 && !contentData.loading" class="no-data" style="">No Data</div>
         </div>
       </a-spin>
       <div class="page-view" style="">
@@ -72,7 +72,7 @@ const contentData = reactive({
   tagData: [],
   loading: false,
 
-  tabData: ['最新', '最热', '推荐'],
+  tabData: ['Latest', 'Hottest', 'Recommend'],
   selectTabIndex: 0,
   tabUnderLeft: 12,
 
@@ -90,7 +90,7 @@ onMounted(() => {
 })
 
 const initSider = () => {
-  contentData.cData.push({key:'-1', title:'全部'})
+  contentData.cData.push({key:'-1', title:'All'})
   listClassificationList().then(res => {
     res.data.forEach(item=>{
       item.key = item.id
@@ -147,7 +147,7 @@ const changePage = (page) => {
   contentData.page = page
   let start = (contentData.page - 1) * contentData.pageSize
   contentData.pageData = contentData.thingData.slice(start, start + contentData.pageSize)
-  console.log('第' + contentData.page + '页')
+  console.log('No.' + contentData.page + 'Page')
 }
 const getThingList = (data) => {
   contentData.loading = true

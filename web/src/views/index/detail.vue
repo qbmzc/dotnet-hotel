@@ -12,7 +12,7 @@
               </div>
               <div class="thing-info-box">
                 <div class="thing-state">
-                  <span class="state hidden-sm">房间状态</span>
+                  <span class="state hidden-sm">RoomStatus</span>
                   <span>空闲</span>
                 </div>
                 <h1 class="thing-name">{{ detailData.title }}</h1>

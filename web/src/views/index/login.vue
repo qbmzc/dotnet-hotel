@@ -4,7 +4,7 @@
       <img :src="LogoIcon" alt="logo" class="logo-icon">
       <div class="login-tab">
         <div class="tab-selected">
-          <span>邮箱登录</span>
+          <span>E-Mail Login</span>
           <span class="tabline tabline-width"></span>
         </div>
       </div>
@@ -12,7 +12,7 @@
         <div class="common-input">
           <img :src="MailIcon" class="left-icon">
           <div class="input-view">
-            <input placeholder="请输入注册邮箱" v-model="pageData.loginForm.username" type="text" class="input">
+            <input placeholder="Please Enter E-Mail Address" v-model="pageData.loginForm.username" type="text" class="input">
             <p class="err-view">
             </p>
           </div>
@@ -21,7 +21,7 @@
         <div class="common-input">
           <img :src="PwdIcon" class="left-icon">
           <div class="input-view">
-            <input placeholder="请输入密码" v-model="pageData.loginForm.password" type="password" class="input">
+            <input placeholder="Password" v-model="pageData.loginForm.password" type="password" class="input">
             <p class="err-view">
             </p>
           </div>
@@ -29,12 +29,12 @@
           <!---->
         </div>
         <div class="next-btn-view">
-          <button class="next-btn btn-active" style="margin: 16px 0px;" @click="handleLogin">登录</button>
+          <button class="next-btn btn-active" style="margin: 16px 0px;" @click="handleLogin">Login</button>
         </div>
       </div>
       <div class="operation">
-        <a @click="handleCreateUser" class="forget-pwd" style="text-align: left;">注册新帐号</a>
-        <a class="forget-pwd" style="text-align: right;">忘记密码？</a>
+        <a @click="handleCreateUser" class="forget-pwd" style="text-align: left;">sigin up</a>
+        <a class="forget-pwd" style="text-align: right;">Forget Password？</a>
       </div>
     </div>
   </div>
