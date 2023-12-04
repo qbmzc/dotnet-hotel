@@ -5,7 +5,7 @@
     </div>
     <div class="search-entry">
       <img :src="SearchIcon" class="search-icon">
-      <input placeholder="输入关键词" ref="keywordRef" @keyup.enter="search" />
+      <input placeholder="Keyword" ref="keywordRef" @keyup.enter="search" />
     </div>
     <div class="right-view">
       <template v-if="userStore.user_token">
@@ -33,7 +33,7 @@
         <!--        </div>-->
       </template>
       <template v-else>
-        <button class="login btn hidden-sm" @click="goLogin()">登录</button>
+        <button class="login btn hidden-sm" @click="goLogin()">Login</button>
       </template>
 
       <div class="right-icon" @click="msgVisible=true">
