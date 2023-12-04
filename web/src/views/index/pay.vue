@@ -2,29 +2,29 @@
   <div>
     <Header/>
     <div class="pay-content">
-      <div class="title">订单提交成功</div>
+      <div class="title">TheOrderWasSuccessfullySubmitted</div>
       <div class="text time-margin">
-        <span>请在 </span>
+        <span>Before </span>
         <span class="time">{{ ddlTime }}</span>
-        <span> 之前付款，超时订单将自动取消</span>
+        <span> payment, the overtime order will be automatically cancelled</span>
       </div>
-      <div class="text">支付金额</div>
+      <div class="text">The amount to be paid</div>
       <div class="price">
         <span class="num">{{ amount }}</span>
-        <span>元</span>
+        <span>$</span>
       </div>
       <div class="pay-choose-view" style="">
         <div class="pay-choose-box flex-view">
           <div class="choose-box choose-box-active">
             <img :src="WxPayIcon">
-            <span>微信支付</span>
+            <span>CreditCard</span>
           </div>
-          <div class="choose-box">
+          <!-- <div class="choose-box">
             <img :src="AliPayIcon">
             <span>支付宝</span>
-          </div>
+          </div> -->
         </div>
-        <div class="tips">请选择任意一种支付方式</div>
+        <div class="tips">Please Select Any Payment Method</div>
         <button class="pay-btn pay-btn-active" @click="handlePay()">确认支付</button>
       </div>
       <div class="pay-qr-view" style="display: none;">
@@ -59,7 +59,7 @@ onMounted(() => {
 })
 
 const handlePay = () => {
-  message.warn('暂无支付功能')
+  message.warn('success')
 }
 const formatDate = (time, format = 'YY-MM-DD hh:mm:ss') => {
   const date = new Date(time)

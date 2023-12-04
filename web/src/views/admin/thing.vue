@@ -4,9 +4,9 @@
     <div class="page-view">
       <div class="table-operations">
         <a-space>
-          <a-button type="primary" @click="handleAdd">新增</a-button>
-          <a-button @click="handleBatchDelete">批量删除</a-button>
-          <a-input-search addon-before="名称" enter-button @search="onSearch" @change="onSearchChange" />
+          <a-button type="primary" @click="handleAdd">New</a-button>
+          <a-button @click="handleBatchDelete">Delete</a-button>
+          <a-input-search addon-before="Name" enter-button @search="onSearch" @change="onSearchChange" />
         </a-space>
       </div>
       <a-table
@@ -23,16 +23,16 @@
           pageSize: data.pageSize,
           onChange: (current) => (data.page = current),
           showSizeChanger: false,
-          showTotal: (total) => `共${total}条数据`,
+          showTotal: (total) => `total: ${total}`,
         }"
       >
         <template #bodyCell="{ text, record, index, column }">
           <template v-if="column.key === 'operation'">
             <span>
-              <a @click="handleEdit(record)">编辑</a>
+              <a @click="handleEdit(record)">Edit</a>
               <a-divider type="vertical" />
-              <a-popconfirm title="确定删除?" ok-text="是" cancel-text="否" @confirm="confirmDelete(record)">
-                <a href="#">删除</a>
+              <a-popconfirm title="Is Delete?" ok-text="Y" cancel-text="N" @confirm="confirmDelete(record)">
+                <a href="#">Del</a>
               </a-popconfirm>
             </span>
           </template>
@@ -47,8 +47,8 @@
           :forceRender="true"
           :title="modal.title"
           width="880px"
-          ok-text="确认"
-          cancel-text="取消"
+          ok-text="Confirm"
+          cancel-text="cancel"
           @cancel="handleCancel"
           @ok="handleOk"
       >
@@ -56,13 +56,13 @@
           <a-form ref="myform" :label-col="{ style: { width: '80px' } }" :model="modal.form" :rules="modal.rules">
             <a-row :gutter="24">
               <a-col span="24">
-                <a-form-item label="房间名称" name="title">
-                  <a-input placeholder="请输入" v-model:value="modal.form.title"></a-input>
+                <a-form-item label="name" name="title">
+                  <a-input placeholder="enter" v-model:value="modal.form.title"></a-input>
                 </a-form-item>
               </a-col>
               <a-col span="12">
-                <a-form-item label="分类" name="classificationId">
-                  <a-select placeholder="请选择"
+                <a-form-item label="classification" name="classificationId">
+                  <a-select placeholder="select"
                             allowClear
                             :options="modal.cData"
                             :field-names="{ label: 'title', value: 'id',}"
@@ -71,8 +71,8 @@
                 </a-form-item>
               </a-col>
               <a-col span="12">
-                <a-form-item label="标签">
-                  <a-select mode="multiple" placeholder="请选择" allowClear v-model:value="modal.form.tags">
+                <a-form-item label="Tag">
+                  <a-select mode="multiple" placeholder="Select" allowClear v-model:value="modal.form.tags">
                     <template v-for="item in modal.tagData">
                       <a-select-option :value="item.id">{{item.title}}</a-select-option>
                     </template>
@@ -80,7 +80,7 @@
                 </a-form-item>
               </a-col>
               <a-col span="24">
-                <a-form-item label="封面">
+                <a-form-item label="Cover">
                   <a-upload-dragger
                       name="file"
                       accept="image/*"
@@ -97,38 +97,38 @@
                       </template>
                     </p>
                     <p class="ant-upload-text">
-                      请选择要上传的封面图片
+                      Please select the cover image you want to upload
                     </p>
                   </a-upload-dragger>
                 </a-form-item>
               </a-col>
 
               <a-col span="24">
-                <a-form-item label="内容简介">
-                  <a-textarea placeholder="请输入" v-model:value="modal.form.description"></a-textarea>
+                <a-form-item label="Description">
+                  <a-textarea placeholder="Description" v-model:value="modal.form.description"></a-textarea>
                 </a-form-item>
               </a-col>
               <a-col span="12">
-                <a-form-item label="定价" name="price">
-                  <a-input-number  placeholder="请输入" :min="0" v-model:value="modal.form.price" style="width: 100%;"></a-input-number>
+                <a-form-item label="Price" name="price">
+                  <a-input-number  placeholder="price" :min="0" v-model:value="modal.form.price" style="width: 100%;"></a-input-number>
                 </a-form-item>
               </a-col>
               <a-col span="12">
-                <a-form-item label="窗户">
-                  <a-select placeholder="请选择" allowClear v-model:value="modal.form.window">
+                <a-form-item label="Window">
+                  <a-select placeholder="window" allowClear v-model:value="modal.form.window">
                     <a-select-option key="有" value="有">有</a-select-option>
                     <a-select-option key="无" value="无">无</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
               <a-col span="12">
-                <a-form-item label="设施" >
-                  <a-input placeholder="请输入" v-model:value="modal.form.sheshi" style="width: 100%;"></a-input>
+                <a-form-item label="Facility" >
+                  <a-input placeholder="facility" v-model:value="modal.form.sheshi" style="width: 100%;"></a-input>
                 </a-form-item>
               </a-col>
               <a-col span="12">
-                <a-form-item label="状态" name="status">
-                  <a-select placeholder="请选择" allowClear v-model:value="modal.form.status">
+                <a-form-item label="Status" name="status">
+                  <a-select placeholder="status" allowClear v-model:value="modal.form.status">
                     <a-select-option key="0" value="0">上架</a-select-option>
                     <a-select-option key="1" value="1">下架</a-select-option>
                   </a-select>
