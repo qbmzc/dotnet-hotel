@@ -24,7 +24,9 @@ namespace TodoApi.Controllers
         [HttpGet("list")]
         public async Task<ActionResult<IEnumerable<Tag>>> GetTag()
         {
-            return await _context.Tag.ToListAsync();
+            List<Tag> rooms = await _context.Tag.ToListAsync();
+
+            return Ok(new APIResponse<IEnumerable<Tag>> { Data = rooms });
         }
 
         // GET: api/Tag/5
@@ -43,13 +45,10 @@ namespace TodoApi.Controllers
 
         // PUT: api/Tag/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTag(long id, Tag tag)
+        [HttpPut("update")]
+        public async Task<IActionResult> PutTag(Tag tag)
         {
-            if (id != tag.Id)
-            {
-                return BadRequest();
-            }
+
 
             _context.Entry(tag).State = EntityState.Modified;
 
@@ -59,9 +58,9 @@ namespace TodoApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TagExists(id))
+                if (!TagExists(tag.Id))
                 {
-                    return NotFound();
+                    return Ok(new APIResponse<Tag> { Code = 404, Msg = "Not Found" });
                 }
                 else
                 {
@@ -69,34 +68,39 @@ namespace TodoApi.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(new APIResponse<Tag> { });
         }
 
         // POST: api/Tag
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Tag>> PostTag(Tag tag)
+        [HttpPost("create")]
+        public async Task<ActionResult<APIResponse<Tag>>> PostTag(Tag tag)
         {
+            tag.CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             _context.Tag.Add(tag);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTag", new { id = tag.Id }, tag);
+            return Ok(new APIResponse<Tag> { Data = tag });
         }
 
         // DELETE: api/Tag/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTag(long id)
+        [HttpPost("delete")]
+        public async Task<ActionResult<APIResponse<Tag>>> DeleteTag(string ids)
         {
-            var tag = await _context.Tag.FindAsync(id);
-            if (tag == null)
+            string[] strings = ids.Split(",");
+            for (int i = 0; i < strings.Length; i++)
             {
-                return NotFound();
+                var tag = await _context.Tag.FindAsync(ids[i]);
+                if (tag == null)
+                {
+                    return Ok(new APIResponse<Tag> { Code = 404, Msg = "Not Found" });
+
+                }
+
+                _context.Tag.Remove(tag);
             }
+            return Ok(new APIResponse<Tag>() { Msg = "delete success" });
 
-            _context.Tag.Remove(tag);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         private bool TagExists(long id)

@@ -16,13 +16,13 @@
           <template #overlay>
             <a-menu>
               <a-menu-item>
-                <a @click="goUserCenter('orderView')">订单中心</a>
+                <a @click="goUserCenter('orderView')">Order Center</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="goUserCenter('userInfoEditView')">个人设置</a>
+                <a @click="goUserCenter('userInfoEditView')">Settings</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="quit()">退出</a>
+                <a @click="quit()">Quit</a>
               </a-menu-item>
             </a-menu>
           </template>
@@ -40,9 +40,9 @@
         <img :src="MessageIcon">
         <span class="msg-point" style=""></span>
       </div>
-      <div>
+      <!-- <div>
         <a-drawer
-            title="我的消息"
+            title="Message"
             placement="right"
             :closable="true"
             :maskClosable="true"
@@ -54,7 +54,7 @@
               <div class="notification-view">
                 <div class="list">
                   <div class="notification-item flex-view" v-for="item in msgData">
-                    <!---->
+                    
                     <div class="content-box">
                       <div class="header">
                         <span class="title-txt">{{item.title}}</span>
@@ -73,7 +73,7 @@
             </div>
           </a-spin>
         </a-drawer>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

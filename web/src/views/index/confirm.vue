@@ -4,14 +4,14 @@
     <section class="cart-page flex-view">
       <div class="left-flex">
         <div class="title flex-view">
-          <h3>订单明细</h3>
+          <h3>Order Details</h3>
         </div>
         <div class="cart-list-view">
           <div class="list-th flex-view">
-            <span class="line-1">房间名称</span>
-            <span class="line-2">价格</span>
-            <span class="line-5">数量</span>
-            <span class="line-6">操作</span>
+            <span class="line-1">Name</span>
+            <span class="line-2">Price</span>
+            <span class="line-5">Count</span>
+            <span class="line-6">Action</span>
           </div>
           <div class="list">
             <div class="items flex-view">
@@ -26,40 +26,40 @@
           </div>
         </div>
         <div class="title flex-view">
-          <h3>备注</h3>
+          <h3>Notes</h3>
         </div>
-        <textarea v-model="pageData.remark" placeholder="输入备注信息，100字以内" class="remark">
+        <textarea v-model="pageData.remark" placeholder="Enter note information, within 100 words" class="remark">
     </textarea>
       </div>
       <div class="right-flex">
         <div class="title flex-view">
         </div>
         <div class="title flex-view">
-          <h3>结算</h3>
-          <span class="click-txt">价格</span>
+          <h3>Settlement</h3>
+          <span class="click-txt">Price</span>
         </div>
         <div class="price-view">
           <div class="price-item flex-view">
-            <div class="item-name">总价</div>
-            <div class="price-txt">¥{{ pageData.amount }}</div>
+            <div class="item-name">Total</div>
+            <div class="price-txt">${{ pageData.amount }}</div>
           </div>
           <div class="price-item flex-view">
-            <div class="item-name">优惠</div>
-            <div class="price-txt">¥0</div>
+            <div class="item-name">Preferential</div>
+            <div class="price-txt">$0</div>
           </div>
           <div class="price-item flex-view">
-            <div class="item-name">折扣</div>
-            <div class="price-txt">¥0</div>
+            <div class="item-name">Discount</div>
+            <div class="price-txt">$0</div>
           </div>
           <div class="total-price-view flex-view">
-            <span>合计</span>
+            <span>Amount To</span>
             <div class="price">
-              <span class="font-big">¥{{ pageData.amount }}</span>
+              <span class="font-big">${{ pageData.amount }}</span>
             </div>
           </div>
           <div class="btns-view">
-            <button class="btn buy" @click="handleBack()">返回</button>
-            <button class="btn pay jiesuan" @click="handleJiesuan()">结算</button>
+            <button class="btn buy" @click="handleBack()">Back</button>
+            <button class="btn pay jiesuan" @click="handleJiesuan()">Settlement</button>
           </div>
         </div>
       </div>

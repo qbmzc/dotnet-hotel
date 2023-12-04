@@ -13,20 +13,20 @@
               <div class="thing-info-box">
                 <div class="thing-state">
                   <span class="state hidden-sm">RoomStatus</span>
-                  <span>空闲</span>
+                  <span>Idle</span>
                 </div>
                 <h1 class="thing-name">{{ detailData.title }}</h1>
                 <span>
-                  <span class="a-price-symbol">¥</span>
+                  <span class="a-price-symbol">$</span>
                   <span class="a-price">{{detailData.price}}</span>
                 </span>
                 <div class="translators flex-view" style="">
-                  <span>设施：</span>
+                  <span>Facilities:</span>
                   <span class="name">{{ detailData.sheshi }}</span>
                 </div>
                 <button class="buy-btn" @click="handleOrder(detailData)">
                   <img :src="AddIcon" />
-                  <span>立即预订</span>
+                  <span>BookNow</span>
                 </button>
               </div>
             </div>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="count-box flex-view">
                   <div class="count-text-box">
-                    <span class="count-title">喜欢</span>
+                    <span class="count-title">Like</span>
                   </div>
                   <div class="count-num-box">
                     <span class="num-text">{{ detailData.wishCount }}</span>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="count-box flex-view">
                   <div class="count-text-box">
-                    <span class="count-title">收藏</span>
+                    <span class="count-title">Collect</span>
                   </div>
                   <div class="count-num-box">
                     <span class="num-text">{{ detailData.collectCount }}</span>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="count-box flex-view">
                   <div class="count-text-box">
-                    <span class="count-title">分享</span>
+                    <span class="count-title">Share</span>
                   </div>
                   <div class="count-num-box">
                     <span class="num-text"></span>
@@ -95,7 +95,7 @@
             </div>
 
             <!--评论-->
-            <div class="thing-comment" :class="selectTabIndex > 0? '':'hide'">
+            <!-- <div class="thing-comment" :class="selectTabIndex > 0? '':'hide'">
               <div class="title">发表新的评论</div>
               <div class="publish flex-view">
                 <img :src="AvatarIcon" class="mine-img">
@@ -134,11 +134,11 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
 
           </div>
           <div class="recommend" style="">
-            <div class="title">热门推荐</div>
+            <div class="title">Popular</div>
             <div class="things">
               <div class="thing-item thing-item" v-for="item in recommendData" @click="handleDetail(item)">
                 <div class="img-view">
@@ -146,7 +146,7 @@
                 <div class="info-view">
                   <h3 class="thing-name">{{ item.title.substring(0, 12)}}</h3>
                   <span>
-                    <span class="a-price-symbol">¥</span>
+                    <span class="a-price-symbol">$</span>
                     <span class="a-price">{{item.price}}</span>
                   </span>
                 </div>
@@ -215,9 +215,10 @@ const selectTab =(index)=> {
 const getThingDetail =()=> {
   detailApi({id: thingId.value}).then(res => {
     detailData.value = res.data
-    detailData.value.cover = BASE_URL + '/api/staticfiles/image/' + detailData.value.cover
+    // detailData.value.cover = BASE_URL + '/api/staticfiles/image/' + detailData.value.cover
+    detailData.value.cover = 'data:image/jpeg;base64,' + detailData.value.cover
   }).catch(err => {
-    message.error('获取详情失败')
+    message.error('failed')
   })
 }
 const addToWish =()=> {
@@ -227,10 +228,10 @@ const addToWish =()=> {
       message.success(res.msg)
       getThingDetail()
     }).catch(err => {
-      console.log('操作失败')
+      console.log('failed')
     })
   } else {
-    message.warn('请先登录')
+    message.warn('please log in first')
   }
 }
 const collect =()=> {
@@ -240,14 +241,14 @@ const collect =()=> {
       message.success(res.msg)
       getThingDetail()
     }).catch(err => {
-      console.log('收藏失败')
+      console.log('Collection failed')
     })
   } else {
-    message.warn('请先登录')
+    message.warn('please log in first')
   }
 }
 const share =()=> {
-  let content = '分享一个非常好玩的网站 ' + window.location.href
+  let content = 'Share ' + window.location.href
   let shareHref = 'http://service.weibo.com/share/share.php?title=' + content
   window.open(shareHref)
 }
@@ -267,7 +268,8 @@ const getRecommendThing =()=> {
   listThingList({sort: 'recommend'}).then(res => {
     res.data.forEach((item, index) => {
       if (item.cover) {
-        item.cover = BASE_URL + '/api/staticfiles/image/' + item.cover
+        // item.cover = BASE_URL + '/api/staticfiles/image/' + item.cover
+        item.cover = 'data:image/jpeg;base64,' + item.cover
       }
     })
     console.log(res)
@@ -297,7 +299,7 @@ const sendComment =()=> {
       console.log(err)
     })
   } else {
-    message.warn('请先登录！')
+    message.warn('please log in first！')
     router.push({name: 'login'})
   }
 }

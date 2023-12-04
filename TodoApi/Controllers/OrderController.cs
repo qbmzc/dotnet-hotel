@@ -21,10 +21,12 @@ namespace TodoApi.Controllers
         }
 
         // GET: api/Order
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrder()
+        [HttpGet("list")]
+        public async Task<ActionResult<APIResponse<IEnumerable<Room>>>> GetOrder()
         {
-            return await _context.Order.ToListAsync();
+            List<Order> orders = await _context.Order.ToListAsync();
+
+            return Ok(new APIResponse<IEnumerable<Order>> { Data = orders });
         }
 
         // GET: api/Order/5

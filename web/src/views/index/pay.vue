@@ -25,7 +25,7 @@
           </div> -->
         </div>
         <div class="tips">Please Select Any Payment Method</div>
-        <button class="pay-btn pay-btn-active" @click="handlePay()">确认支付</button>
+        <button class="pay-btn pay-btn-active" @click="handlePay()">Confirm Payment</button>
       </div>
       <div class="pay-qr-view" style="display: none;">
         <div class="loading-tip" style="">正在生成安全支付二维码</div>
@@ -45,7 +45,7 @@
 <script setup>
 import Header from '/@/views/index/components/header.vue'
 import {message} from "ant-design-vue";
-import WxPayIcon from '/@/assets/images/wx-pay-icon.svg';
+import WxPayIcon from '/@/assets/images/credit-card.svg';
 import AliPayIcon from '/@/assets/images/ali-pay-icon.svg';
 
 const route = useRoute();

@@ -13,7 +13,6 @@ defineEmits(['update:phonePrefix', 'update:phoneNumber'])
     :value="phonePrefix"
     @input="$emit('update:phonePrefix', $event.target.value)"
   />
-  <span>-</span>
   <input
     type="text"
     :value="phoneNumber"

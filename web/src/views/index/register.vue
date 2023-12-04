@@ -92,48 +92,76 @@ const tData = reactive({
     username: '',
     password: '',
     repassword: '',
-    country: ref(''),
+    country: ref('USA'),
     phoneNumber: '',
     country_codes: {
-      "China": "+86",
+      "China": "86",
       "USA": "+1",
       "UK": "+44",
       "Japan": "+81",
-      "Canda": "+1",
+      "Canada": "+1",
     },
-    phonePrefix: ref(''),
+    postalCode: '',
+    phonePrefix: ref('+1'),
+    creDitCard: '',
+    lastName: '',
+    firstName: '',
+    cardType: {
+      "MasterCard": ["51", "52", "53", "54", "55"],
+      "Visa": ["4"],
+      "American Express": ["34", "37"]
+    },
+    expirationDate: ''
   }
 })
 
-var country = tData.loginForm.country; // 获取国家代码
-const countryCode = tData.loginForm.country_codes[country]; // 获取国家代码
-tData.loginForm.phonePrefix = countryCode; // 获取电话号码
+watch(() => tData.loginForm.country, (newCountry) => {
+  tData.loginForm.phonePrefix = tData.loginForm.country_codes[newCountry];
+});
 const handleRegister = () => {
   console.log('login')
   if (tData.loginForm.username === ''
     || tData.loginForm.password === ''
     || tData.loginForm.repassword === '') {
-    message.warn('Not null！')
+    message.warn('Not null!')
     return;
   }
 
-  const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/; // 添加电话号码正则表达式
-  const countryCode = tData.loginForm.country_codes[country]; // 获取国家代码
-  tData.loginForm.phonePrefix = countryCode; // 获取电话号码
-  const phoneNumber = tData.loginForm.phoneNumber; // 获取电话号码
-  if (!phoneNumber || !phoneRegex.test(phoneNumber)) { // 验证电话号码格式
-    message.warn('Invalid phone number format！');
-    return;
+  const specialCharacters = /[;:!@#$%^*+?\/<>1234567890]/g;
+  const username = tData.loginForm.username
+  if (username.match(specialCharacters)) {
+    message.warn('Invalid  characters!')
   }
+
+  const emailRegex =/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  if(!emailRegex.test(username)){
+    message.warn('Invalid  Email!')
+  }
+
+  const phoneRegex = /^(\(\d{3}\)|\d{3})\d{3}-\d{4}$/; // 添加电话号码正则表达式
+  const phoneNumber = tData.loginForm.phoneNumber; // 获取电话号码
+  const phonePrefix = tData.loginForm.phonePrefix; // 获取电话号码
+  const county = tData.loginForm.country;
+  const postalCode =tData.loginForm.postalCode;
+  if (county == 'USA' || county == 'Canada') {
+    //验证美国或加拿大手机号码，其他国家请自行验证
+    if (!phoneNumber || !phoneRegex.test(phoneNumber)) { // 验证电话号码格式
+      message.warn('Invalid phone number format!');
+      return;
+    }
+    if()
+  }
+
 
   userRegisterApi({
     username: tData.loginForm.username,
     password: tData.loginForm.password,
     rePassword: tData.loginForm.repassword,
     phoneNumber: tData.loginForm.phoneNumber, // 添加电话号码到请求参数中
-    countryCode: tData.loginForm.country // 添加国家代码到请求参数中
+    countryCode: phonePrefix + "-" + phoneNumber // 添加国家代码到请求参数中
   }).then(res => {
-    message.success('success！')
+    message.success('success!')
     router.push({ name: 'login' })
   }).catch(err => {
     message.error(err.msg || 'failed')
