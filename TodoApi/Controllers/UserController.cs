@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using TodoApi.Models;
 using TodoApi.Utils;
 
@@ -32,9 +33,21 @@ namespace TodoApi.Controllers
 
         // GET: api/User
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<User>>> ListUser()
+        public async Task<ActionResult<APIResponse<IEnumerator<User>>>> ListUser([FromQuery]string? keyword)
         {
-            return await _context.User.ToListAsync();
+            List<User>? rooms = null;
+            if (keyword != null)
+            {
+                rooms = await _context.User.Where(u => u.Username == keyword).ToListAsync();
+
+            }
+            else
+            {
+
+                rooms = await _context.User.ToListAsync();
+            }
+
+            return Ok(new APIResponse<IEnumerable<User>> { Data = rooms });
         }
 
         // GET: api/User
@@ -154,7 +167,7 @@ namespace TodoApi.Controllers
             return Ok(new APIResponse<User>() { Data = user });
         }
 
-        //创建管理员
+        //更新密码
         // POST: api/Tag
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("updatePwd")]
@@ -202,7 +215,7 @@ namespace TodoApi.Controllers
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("userRegister")]
-        public async Task<ActionResult<APIResponse<User>>> RegUser(User user)
+        public async Task<ActionResult<APIResponse<User>>> RegUser([FromForm]User user)
         {
             if (user.RePassword == null || user.Username == null || user.Password == null)
             {

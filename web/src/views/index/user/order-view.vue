@@ -1,19 +1,19 @@
 <template>
   <div class="content-list">
-    <div class="list-title">我的订单</div>
+    <div class="list-title">MyOrders</div>
     <a-tabs default-active-key="1" @change="onTabChange">
-      <a-tab-pane key="1" tab="全部">
+      <a-tab-pane key="1" tab="All">
       </a-tab-pane>
-      <a-tab-pane key="2" tab="待付款">
+      <a-tab-pane key="2" tab="PendingPayment">
       </a-tab-pane>
-      <a-tab-pane key="3" tab="已支付">
+      <a-tab-pane key="3" tab="Paid">
       </a-tab-pane>
     </a-tabs>
     <div class="list-content">
       <div class="order-item-view" v-for="(item, index) in orderData" :key="index">
         <div class="header flex-view">
           <div class="left">
-            <span class="text">订单号</span>
+            <span class="text">OrderNubber</span>
             <span class="num mg-4">#</span>
             <span class="num">{{item.orderNumber}}</span>
             <span class="time">{{getFormatTime(item.orderTime, true)}}</span>
@@ -21,15 +21,15 @@
           <div class="right">
             <a-popconfirm
               v-if="item.status==='1'"
-              title="确定取消订单？"
-              ok-text="是"
-              cancel-text="否"
+              title="Are You Sure You Want To Cancel Your Order"
+              ok-text="Yes"
+              cancel-text="No"
               @confirm="handleCancel(item)"
             >
-              <a-button type="primary" size="small" style="margin-right: 24px;">取消</a-button>
+              <a-button type="primary" size="small" style="margin-right: 24px;">Cancel</a-button>
             </a-popconfirm>
-            <span class="text">订单状态</span>
-            <span class="state">{{item.status==='1'? '待支付': item.status === '2'? '已支付':'已取消'}}</span>
+            <span class="text">OrderStatus</span>
+            <span class="state">{{item.status==='1'? 'Pending': item.status === '2'? 'Paid':'Canceled'}}</span>
           </div>
         </div>
         <div class="content flex-view">
@@ -49,23 +49,23 @@
             </div>
           </div>
           <div class="right-info">
-            <p class="title">备注信息</p>
-            <p class="text">{{item.remark || "无"}}
+            <p class="title">Remark</p>
+            <p class="text">{{item.remark || "null"}}
             </p>
           </div>
         </div>
         <div class="bottom flex-view">
           <div class="left">
-            <span class="text">共{{item.count}}件</span>
-            <span class="open" @click="handleDetail(item.thingId)">房间详情</span>
+            <span class="text">Total {{item.count}}</span>
+            <span class="open" @click="handleDetail(item.thingId)">Details</span>
           </div>
           <div class="right flex-view">
-            <span class="text">总计</span>
-            <span class="num">¥ {{item.price * item.count}}</span>
-            <span class="text">优惠</span>
-            <span class="num">¥0</span>
-            <span class="text">实际支付</span>
-            <span class="money">¥ {{item.price * item.count}}</span>
+            <span class="text">Total</span>
+            <span class="num">$ {{item.price * item.count}}</span>
+            <span class="text">Preferential</span>
+            <span class="num">$0</span>
+            <span class="text">ActualPayment</span>
+            <span class="money">$ {{item.price * item.count}}</span>
           </div>
         </div>
       </div>
@@ -112,7 +112,8 @@ const getOrderList= ()=> {
   userOrderListApi({userId: userId, status: orderStatus.value}).then(res => {
     res.data.forEach((item, index) => {
       if (item.cover) {
-        item.cover = BASE_URL + '/api/staticfiles/image/' + item.cover
+        // item.cover = BASE_URL + '/api/staticfiles/image/' + item.cover
+        item.cover = 'data:image/jpeg;base64,' + item.cover
       }
     })
     orderData.value = res.data
@@ -131,10 +132,10 @@ const handleCancel =(item)=> {
   cancelUserOrderApi({
     id: item.id
   }).then(res => {
-    message.success('取消成功')
+    message.success('Success')
     getOrderList()
   }).catch(err => {
-    message.error(err.msg || '取消失败')
+    message.error(err.msg || 'Failed')
   })
 }
 

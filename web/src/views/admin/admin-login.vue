@@ -2,12 +2,12 @@
   <div id="userLayout">
     <div class="user-layout-header">
       <img class="logo" :src="logoImage" alt="">
-      <span>酒店预订管理系统</span>
+      <span>Hotel Reservation Management System</span>
     </div>
     <div class="main-container">
       <div class="main">
         <div class="main_right">
-          <h2 class="sys_title">管理员登录</h2>
+          <h2 class="sys_title">Administrator Login</h2>
           <a-form
               ref="myform"
               layout="vertical"
@@ -15,20 +15,20 @@
               :rules="data.rules"
               :hideRequiredMark="true"
           >
-            <a-form-item name="username" label="账号" :colon="false">
+            <a-form-item name="username" label="Account" :colon="false">
               <a-input
                   size="large"
-                  placeholder="请输入登录账号"
+                  placeholder="username"
                   v-model:value="data.loginForm.username"
                   @pressEnter="handleSubmit">
                 <a-icon slot="prefix" type="user"/>
               </a-input>
             </a-form-item>
-            <a-form-item name="password" label="密码" :colon="false">
+            <a-form-item name="password" label="Password" :colon="false">
               <a-input
                   size="large"
                   type="password"
-                  placeholder="请输入登录密码"
+                  placeholder="Password"
                   v-model:value="data.loginForm.password"
                   @pressEnter="handleSubmit">
                 <a-icon slot="prefix" type="lock"/>
@@ -43,7 +43,7 @@
                   block
                   @click="handleSubmit"
               >
-                登录
+                Login
               </a-button>
             </a-form-item>
           </a-form>
@@ -81,10 +81,10 @@ const data = reactive({
   },
   rules: {
     username: [
-      {required: true, message: '请输入用户名', trigger: 'blur'}
+      {required: true, message: 'please enter a username', trigger: 'blur'}
     ],
     password: [
-      {required: true, message: '请输入密码', trigger: 'blur'}
+      {required: true, message: 'please enter your password', trigger: 'blur'}
     ]
   }
 })
@@ -93,7 +93,7 @@ const handleSubmit = () => {
   myform.value?.validate().then(() => {
     handleLogin()
   }).catch(() => {
-    message.warn('不能为空')
+    message.warn('it can t be empty')
   })
 }
 
@@ -104,13 +104,13 @@ const handleLogin = () => {
   }).then(res=>{
     loginSuccess()
   }).catch(err=> {
-      message.warn(err.msg || '登录失败')
+      message.warn(err.msg || 'login failed')
   })
 }
 
 const loginSuccess = () => {
   router.push({ path: '/admin' })
-  message.success('登录成功！')
+  message.success('login successful')
 }
 
 

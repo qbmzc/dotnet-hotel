@@ -74,7 +74,7 @@ namespace TodoApi.Controllers
         // POST: api/Tag
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("create")]
-        public async Task<ActionResult<APIResponse<Tag>>> PostTag(Tag tag)
+        public async Task<ActionResult<APIResponse<Tag>>> PostTag([FromForm]Tag tag)
         {
             tag.CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             _context.Tag.Add(tag);
@@ -90,7 +90,7 @@ namespace TodoApi.Controllers
             string[] strings = ids.Split(",");
             for (int i = 0; i < strings.Length; i++)
             {
-                var tag = await _context.Tag.FindAsync(ids[i]);
+                var tag = await _context.Tag.FindAsync(strings[i]);
                 if (tag == null)
                 {
                     return Ok(new APIResponse<Tag> { Code = 404, Msg = "Not Found" });

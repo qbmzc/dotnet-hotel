@@ -116,8 +116,8 @@
               <a-col span="12">
                 <a-form-item label="Window">
                   <a-select placeholder="window" allowClear v-model:value="modal.form.window">
-                    <a-select-option key="有" value="有">有</a-select-option>
-                    <a-select-option key="无" value="无">无</a-select-option>
+                    <a-select-option key="yes" value="yes">Yes</a-select-option>
+                    <a-select-option key="no" value="no">No</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -129,8 +129,8 @@
               <a-col span="12">
                 <a-form-item label="Status" name="status">
                   <a-select placeholder="status" allowClear v-model:value="modal.form.status">
-                    <a-select-option key="0" value="0">上架</a-select-option>
-                    <a-select-option key="1" value="1">下架</a-select-option>
+                    <a-select-option key="0" value="0">Shelves</a-select-option>
+                    <a-select-option key="1" value="1">TakenOff</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -153,50 +153,50 @@ import { FileImageOutlined } from '@ant-design/icons-vue';
 const columns = reactive([
 
   {
-    title: '序号',
+    title: 'ID',
     dataIndex: 'index',
     key: 'index',
     width: 60
   },
   {
-    title: '房间名称',
+    title: 'Room',
     dataIndex: 'title',
     key: 'title'
   },
   {
-    title: '价格',
+    title: 'Price',
     dataIndex: 'price',
     key: 'price'
   },
   {
-    title: '窗户',
+    title: 'Window',
     dataIndex: 'window',
     key: 'window'
   },
   {
-    title: '设施',
+    title: 'Facility',
     dataIndex: 'sheshi',
     key: 'sheshi'
   },
   {
-    title: '价格',
+    title: 'Price',
     dataIndex: 'price',
     key: 'price'
   },
   {
-    title: '简介',
+    title: 'Description',
     dataIndex: 'description',
     key: 'description',
     customRender: ({ text, record, index, column }) => text ? text.substring(0, 10) + '...' : '--'
   },
   {
-    title: '状态',
+    title: 'Status',
     dataIndex: 'status',
     key: 'status',
     customRender: ({ text, record, index, column }) => text === '0' ? '上架' : '下架'
   },
   {
-    title: '操作',
+    title: 'Action',
     dataIndex: 'action',
     key: 'operation',
     align: 'center',
@@ -249,11 +249,11 @@ const modal = reactive({
     imageFile: undefined
   },
   rules: {
-    title: [{ required: true, message: '请输入名称', trigger: 'change' }],
-    classificationId: [{ required: true, message: '请选择分类', trigger: 'change' }],
-    repertory: [{ required: true, message: '请输入库存', trigger: 'change' }],
-    price: [{ required: true, message: '请输入定价', trigger: 'change' }],
-    status: [{ required: true, message: '请选择状态', trigger: 'change' }]
+    title: [{ required: true, message: 'please enter a name', trigger: 'change' }],
+    classificationId: [{ required: true, message: 'please select a category', trigger: 'change' }],
+    repertory: [{ required: true, message: 'please enter inventory', trigger: 'change' }],
+    price: [{ required: true, message: 'please enter pricing', trigger: 'change' }],
+    status: [{ required: true, message: 'please select a status', trigger: 'change' }]
   },
 });
 
@@ -318,7 +318,7 @@ const handleAdd = () => {
   resetModal();
   modal.visile = true;
   modal.editFlag = false;
-  modal.title = '新增';
+  modal.title = 'New';
   // 重置
   for (const key in modal.form) {
     modal.form[key] = undefined;
@@ -329,7 +329,7 @@ const handleEdit = (record: any) => {
   resetModal();
   modal.visile = true;
   modal.editFlag = true;
-  modal.title = '编辑';
+  modal.title = 'Edit';
   // 重置
   for (const key in modal.form) {
     modal.form[key] = undefined;
@@ -356,7 +356,7 @@ const confirmDelete = (record: any) => {
         getDataList();
       })
       .catch((err) => {
-        message.error(err.msg || '操作失败');
+        message.error(err.msg || 'the operation failed');
       });
 };
 
@@ -364,17 +364,17 @@ const handleBatchDelete = () => {
   console.log(data.selectedRowKeys);
   if (data.selectedRowKeys.length <= 0) {
     console.log('hello');
-    message.warn('请勾选删除项');
+    message.warn('please select the delete item');
     return;
   }
   deleteApi({ ids: data.selectedRowKeys.join(',') })
       .then((res) => {
-        message.success('删除成功');
+        message.success('the deletion is successful');
         data.selectedRowKeys = [];
         getDataList();
       })
       .catch((err) => {
-        message.error(err.msg || '操作失败');
+        message.error(err.msg || 'the operation failed');
       });
 };
 
@@ -419,7 +419,7 @@ const handleOk = () => {
               })
               .catch((err) => {
                 console.log(err);
-                message.error(err.msg || '操作失败');
+                message.error(err.msg || 'the operation failed');
               });
         } else {
           createApi(formData)
@@ -429,12 +429,12 @@ const handleOk = () => {
               })
               .catch((err) => {
                 console.log(err);
-                message.error(err.msg || '操作失败');
+                message.error(err.msg || 'the operation failed');
               });
         }
       })
       .catch((err) => {
-        console.log('不能为空');
+        console.log('it can t be empty');
       });
 };
 

@@ -1,22 +1,22 @@
 <template>
   <div class="content-list">
-    <div class="list-title">帐号安全</div>
+    <div class="list-title">AccountSecurity</div>
     <div class="list-content">
       <div class="safe-view">
         <div class="safe-info-box">
           <div class="item flex-view">
-            <div class="label">账号安全等级</div>
+            <div class="label">SecurityLevel</div>
             <div class="right-box flex-center flex-view">
-              <div class="safe-text">低风险</div>
+              <div class="safe-text">LowRisk</div>
               <progress max="3" class="safe-line" value="2">
               </progress>
             </div>
           </div>
           <div class="item flex-view">
-            <div class="label">绑定手机</div>
+            <div class="label">BindPhone</div>
             <div class="right-box">
-              <input class="input-dom" placeholder="请输入手机号">
-              <a-button type="link" @click="handleBindMobile()">更换</a-button>
+              <input class="input-dom" placeholder="Phone">
+              <a-button type="link" @click="handleBindMobile()">Replacement</a-button>
             </div>
           </div>
         </div>
@@ -24,21 +24,21 @@
           <div class="pwd-edit">
             <!---->
             <div class="item flex-view">
-              <div class="label">当前密码</div>
+              <div class="label">CurrentPwd</div>
               <div class="right-box">
-                <a-input-password placeholder="输入当前密码" v-model:value="password"/>
+                <a-input-password placeholder="CurrentPassword" v-model:value="password"/>
               </div>
             </div>
             <div class="item flex-view">
-              <div class="label">新密码</div>
+              <div class="label">NewPwd</div>
               <div class="right-box">
-                <a-input-password placeholder="输入新密码" v-model:value="newPassword1"/>
+                <a-input-password placeholder="NewPassword" v-model:value="newPassword1"/>
               </div>
             </div>
             <div class="item flex-view">
-              <div class="label">确认新密码</div>
+              <div class="label">ConfirmNPwd</div>
               <div class="right-box">
-                <a-input-password placeholder="重复输入密码" v-model:value="newPassword2"/>
+                <a-input-password placeholder="NewPassword" v-model:value="newPassword2"/>
               </div>
             </div>
             <div class="item flex-view">
@@ -69,16 +69,16 @@ let newPassword1 = ref('')
 let newPassword2 = ref('')
 
 const handleBindMobile = () => {
-  message.info('功能开发中')
+  message.info('functions are under development')
 }
 
 const handleUpdatePwd = () => {
   if (!password.value || !newPassword1.value || !newPassword2.value) {
-    message.warn('不能为空')
+    message.warn('it can t be empty')
     return
   }
   if (newPassword1.value !== newPassword2.value) {
-    message.warn('密码不一致')
+    message.warn('passwords are inconsistent')
     return
   }
 
@@ -88,7 +88,7 @@ const handleUpdatePwd = () => {
     password: password.value,
     newPassword: newPassword1.value,
   }).then(res => {
-    message.success('修改成功')
+    message.success('the modification was successful')
   }).catch(err => {
     message.error(err.msg)
   })

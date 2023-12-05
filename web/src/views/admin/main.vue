@@ -3,11 +3,11 @@
     <a-layout-header style="background: #fff; padding: 0">
       <div class="header">
         <img class="header-logo" :src="logo">
-        <span class="header-title">酒店预订管理系统</span>
+        <span class="header-title">Hotel Reservation Management System</span>
         <div class="empty"></div>
-        <a-button style="margin-right: 24px;" @click="handlePreview">前台预览</a-button>
-        <span>管理员[{{ userStore.admin_user_name }}]</span>
-        <a class="header-quit" @click="handleLogout">退出</a>
+        <a-button style="margin-right: 24px;" @click="handlePreview">Foreground Preview</a-button>
+        <span>Administrator[{{ userStore.admin_user_name }}]</span>
+        <a class="header-quit" @click="handleLogout">Quit</a>
       </div>
     </a-layout-header>
     <a-layout>
@@ -16,29 +16,29 @@
 
           <a-menu-item key="thing">
             <database-outlined/>
-            <span>房间管理</span>
+            <span>Room Management</span>
           </a-menu-item>
           <a-menu-item key="classification">
             <layout-outlined/>
-            <span>分类管理</span>
+            <span>Classification Management</span>
           </a-menu-item>
           <a-menu-item key="tag">
             <tag-outlined/>
-            <span>标签管理</span>
+            <span>Tag Management</span>
           </a-menu-item>
           <a-menu-item key="order">
             <dollar-outlined/>
-            <span>订单管理</span>
+            <span>Order Management</span>
           </a-menu-item>
           <a-menu-item key="user">
             <user-outlined/>
-            <span>用户管理</span>
+            <span>User Management</span>
           </a-menu-item>
-          <a-menu-item key="comment">
+          <!-- <a-menu-item key="comment">
             <comment-outlined/>
             <span>评论管理</span>
-          </a-menu-item>
-          <a-sub-menu>
+          </a-menu-item> -->
+          <!-- <a-sub-menu>
             <template #icon>
               <folder-outlined/>
             </template>
@@ -51,8 +51,8 @@
               <appstore-outlined/>
               <span>通知公告</span>
             </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu>
+          </a-sub-menu> -->
+          <!-- <a-sub-menu>
             <template #icon>
               <folder-outlined/>
             </template>
@@ -69,16 +69,16 @@
               <appstore-outlined/>
               <span>错误日志</span>
             </a-menu-item>
-          </a-sub-menu>
+          </a-sub-menu> -->
 
-          <a-menu-item key="overview">
+          <!-- <a-menu-item key="overview">
             <home-outlined/>
             <span>统计分析</span>
           </a-menu-item>
           <a-menu-item key="sysInfo">
             <info-circle-outlined/>
             <span>系统信息</span>
-          </a-menu-item>
+          </a-menu-item> -->
         </a-menu>
       </a-layout-sider>
       <a-layout-content :style="{ margin: '16px 16px', minHeight: '200px' }">

@@ -4,8 +4,8 @@
     <div class="page-view">
       <div class="table-operations">
         <a-space>
-          <a-button type="primary" @click="handleAdd">新增</a-button>
-          <a-button @click="handleBatchDelete">批量删除</a-button>
+          <a-button type="primary" @click="handleAdd">New</a-button>
+          <a-button @click="handleBatchDelete">Delete</a-button>
         </a-space>
       </div>
       <a-table
@@ -22,16 +22,16 @@
           pageSize: data.pageSize,
           onChange: (current) => (data.page = current),
           showSizeChanger: false,
-          showTotal: (total) => `共${total}条数据`,
+          showTotal: (total) => `Total ${total}`,
         }"
       >
         <template #bodyCell="{ text, record, index, column }">
           <template v-if="column.key === 'operation'">
             <span>
-              <a @click="handleEdit(record)">编辑</a>
+              <a @click="handleEdit(record)">Edit</a>
               <a-divider type="vertical" />
-              <a-popconfirm title="确定删除?" ok-text="是" cancel-text="否" @confirm="confirmDelete(record)">
-                <a href="#">删除</a>
+              <a-popconfirm title="Delete?" ok-text="Yes" cancel-text="No" @confirm="confirmDelete(record)">
+                <a href="#">Delete</a>
               </a-popconfirm>
             </span>
           </template>
@@ -45,8 +45,8 @@
           :visible="modal.visile"
           :forceRender="true"
           :title="modal.title"
-          ok-text="确认"
-          cancel-text="取消"
+          ok-text="Yes"
+          cancel-text="No"
           @cancel="handleCancel"
           @ok="handleOk"
       >
@@ -54,8 +54,8 @@
           <a-form ref="myform" :label-col="{ style: { width: '80px' } }" :model="modal.form" :rules="modal.rules">
             <a-row :gutter="24">
               <a-col span="24">
-                <a-form-item label="分类名称" name="title">
-                  <a-input placeholder="请输入" v-model:value="modal.form.title"></a-input>
+                <a-form-item label="Title" name="title">
+                  <a-input placeholder="Classification" v-model:value="modal.form.title"></a-input>
                 </a-form-item>
               </a-col>
             </a-row>
@@ -73,12 +73,12 @@ import { createApi, listApi, updateApi, deleteApi } from '/@/api/classification'
 
 const columns = reactive([
   {
-    title: '分类名称',
+    title: 'Title',
     dataIndex: 'title',
     key: 'title',
   },
   {
-    title: '操作',
+    title: 'Action',
     dataIndex: 'action',
     key: 'operation',
     align: 'center',
@@ -109,7 +109,7 @@ const modal = reactive({
     title: undefined,
   },
   rules: {
-    title: [{ required: true, message: '请输入', trigger: 'change' }],
+    title: [{ required: true, message: 'enter title', trigger: 'change' }],
   },
 });
 
@@ -149,7 +149,7 @@ const handleAdd = () => {
   resetModal();
   modal.visile = true;
   modal.editFlag = false;
-  modal.title = '新增';
+  modal.title = 'New';
   // 重置
   for (const key in modal.form) {
     modal.form[key] = undefined;
@@ -159,7 +159,7 @@ const handleEdit = (record: any) => {
   resetModal();
   modal.visile = true;
   modal.editFlag = true;
-  modal.title = '编辑';
+  modal.title = 'Edit';
   // 重置
   for (const key in modal.form) {
     modal.form[key] = undefined;
@@ -177,7 +177,7 @@ const confirmDelete = (record: any) => {
         getDataList();
       })
       .catch((err) => {
-        message.error(err.msg || '删除失败');
+        message.error(err.msg || 'deletion failed');
       });
 };
 
@@ -185,17 +185,17 @@ const handleBatchDelete = () => {
   console.log(data.selectedRowKeys);
   if (data.selectedRowKeys.length <= 0) {
     console.log('hello');
-    message.warn('请勾选删除项');
+    message.warn('please select the delete item');
     return;
   }
   deleteApi({ ids: data.selectedRowKeys.join(',') })
       .then((res) => {
-        message.success('删除成功');
+        message.success('the deletion is successful');
         data.selectedRowKeys = [];
         getDataList();
       })
       .catch((err) => {
-        message.error(err.msg || '删除失败');
+        message.error(err.msg || 'deletion failed');
       });
 };
 
@@ -211,7 +211,7 @@ const handleOk = () => {
               })
               .catch((err) => {
                 console.log(err);
-                message.error(err.msg || '操作失败');
+                message.error(err.msg || 'the operation failed');
 
               });
         } else {
@@ -222,13 +222,13 @@ const handleOk = () => {
               })
               .catch((err) => {
                 console.log(err);
-                message.error(err.msg || '操作失败');
+                message.error(err.msg || 'the operation failed');
 
               });
         }
       })
       .catch((err) => {
-        console.log('不能为空');
+        console.log('it can t be empty');
       });
 };
 

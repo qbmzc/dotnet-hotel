@@ -13,25 +13,18 @@ public class Order
     public string? ThingId { get; set; }
     public string? Count { get; set; }
     public string? OrderNumber { get; set; }
-    public string? ReceiverAddress { get; set; }
-    public string? ReceiverName { get; set; }
-    public string? ReceiverPhone { get; set; }
+    public string? CheckIn { get; set; }
+    public string? CheckOut { get; set; }
     public string? Remark { get; set; }
     //用户名称
-    [IgnoreDataMember]
+
 
     public string? Username { get; set; }
-    [IgnoreDataMember]
-    //商品名称
 
     public string? Title { get; set; }
-    //封面
-    [IgnoreDataMember]
-    
+  
 
     public string? Cover { get; set; }
-    //价格
-    [IgnoreDataMember]
 
     public string? Price { get; set; }
 }

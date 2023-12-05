@@ -3,9 +3,9 @@
     <h1 class="search-name-box">{{ tData.keyword }}</h1>
     <div class="search-tab-nav clearfix">
       <div class="tab-text">
-        <span>与</span>
+        <span>about</span>
         <span class="strong">{{ tData.keyword }}</span>
-        <span>相关的内容</span>
+        <span>related content</span>
       </div>
     </div>
     <div class="content-list">
@@ -19,7 +19,7 @@
               <div class="info-view">
                 <h3 class="thing-name">{{ item.title.substring(0, 12) }}</h3>
                 <span>
-                  <span class="a-price-symbol">¥</span>
+                  <span class="a-price-symbol">$</span>
                   <span class="a-price">{{ item.price }}</span>
                 </span>
               </div>
@@ -75,7 +75,7 @@ const changePage = (page) => {
   tData.page = page
   let start = (tData.page - 1) * tData.pageSize
   tData.pageData = tData.thingData.slice(start, start + tData.pageSize)
-  console.log('第' + tData.page + '页')
+  console.log('No.' + tData.page + ' page')
 }
 const handleDetail = (item) => {
   // 跳转新页面
@@ -87,7 +87,7 @@ const getThingList = (data) => {
   listThingList(data).then(res => {
     res.data.forEach((item, index) => {
       if (item.cover) {
-        item.cover = BASE_URL + '/api/staticfiles/image/' + item.cover
+        item.cover =  'data:image/jpeg;base64,' + item.cover
       }
     })
     tData.thingData = res.data

@@ -29,6 +29,15 @@ namespace TodoApi.Controllers
             return Ok(new APIResponse<IEnumerable<Order>> { Data = orders });
         }
 
+        // GET: api/Order
+        [HttpGet("userOrderList")]
+        public async Task<ActionResult<APIResponse<IEnumerable<Room>>>> GetUserOrder(string userId, string status)
+        {
+            List<Order> orders = await _context.Order.Where(o => o.UserId == userId && o.Status == status).ToListAsync();
+
+            return Ok(new APIResponse<IEnumerable<Order>> { Data = orders });
+        }
+
         // GET: api/Order/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(long id)
@@ -46,7 +55,7 @@ namespace TodoApi.Controllers
         // PUT: api/Order/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("update")]
-        public async Task<ActionResult<APIResponse<Order>>> PutOrder(Order order)
+        public async Task<ActionResult<APIResponse<Order>>> PutOrder([FromForm]Order order)
         {
             if (0 == order.Id)
             {
@@ -71,7 +80,7 @@ namespace TodoApi.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(new APIResponse<Order>() { });
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -90,7 +99,7 @@ namespace TodoApi.Controllers
 
             }
 
-            order.Status="7";//7 cancel
+            order.Status = "7";//7 cancel
             _context.Entry(order).State = EntityState.Modified;
 
             try
@@ -109,11 +118,12 @@ namespace TodoApi.Controllers
                 }
             }
 
-                return Ok(new APIResponse<Order> {  Msg = "order is canceled" });
+            return Ok(new APIResponse<Order> { Msg = "order is canceled" });
         }
 
-         [HttpPost("cancelUserOrder")]
-        public async Task<ActionResult<APIResponse<Order>>> CancelUserOrder(long id)
+  // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("payUserOrder")]
+        public async Task<ActionResult<APIResponse<Order>>> PayOrder(long id)
         {
             if (0 == id)
             {
@@ -127,7 +137,7 @@ namespace TodoApi.Controllers
 
             }
 
-            order.Status="7";//7 cancel
+            order.Status = "2";//2 支付
             _context.Entry(order).State = EntityState.Modified;
 
             try
@@ -146,7 +156,44 @@ namespace TodoApi.Controllers
                 }
             }
 
-                return Ok(new APIResponse<Order> {  Msg = "order is canceled" });
+            return Ok(new APIResponse<Order> { Msg = "order is canceled" });
+        }
+
+        [HttpPost("cancelUserOrder")]
+        public async Task<ActionResult<APIResponse<Order>>> CancelUserOrder(long id)
+        {
+            if (0 == id)
+            {
+                return Ok(new APIResponse<Order> { Code = 403, Msg = "order id is null" });
+            }
+
+            Order? order = await _context.Order.FindAsync(id);
+            if (null == order)
+            {
+                return Ok(new APIResponse<Order> { Code = 404, Msg = "order is null" });
+
+            }
+
+            order.Status = "7";//7 cancel
+            _context.Entry(order).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OrderExists(order.Id))
+                {
+                    return Ok(new APIResponse<Order> { Code = 404, Msg = "Not Found" });
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok(new APIResponse<Order> { Msg = "order is canceled" });
         }
 
         // POST: api/Order
@@ -166,19 +213,25 @@ namespace TodoApi.Controllers
         }
 
         // DELETE: api/Order/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<APIResponse<Order>>> DeleteOrder(long id)
+        [HttpPost("delete")]
+        public async Task<ActionResult<APIResponse<Order>>> DeleteOrder(string ids)
         {
-            var order = await _context.Order.FindAsync(id);
-            if (order == null)
+           string[] strings = ids.Split(",");
+            for (int i = 0; i < strings.Length; i++)
             {
-                return Ok(new APIResponse<Order>() { Msg = "Not Found", Code = 404 });
+                var room = await _context.Order.FindAsync(long.Parse(strings[i]));
+                if (room == null)
+                {
+                    return Ok(new APIResponse<Order> { Code = 404, Msg = "Not Found" });
+
+                }
+
+                _context.Order.Remove(room);
             }
 
-            _context.Order.Remove(order);
             await _context.SaveChangesAsync();
 
-            return Ok(new APIResponse<Order>() { });
+            return Ok(new APIResponse<Order> { });
         }
 
         private bool OrderExists(long id)

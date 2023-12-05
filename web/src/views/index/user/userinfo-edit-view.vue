@@ -1,11 +1,11 @@
 <template>
   <div class="content-list">
-    <div class="list-title">设置</div>
+    <div class="list-title">SetUp</div>
     <a-spin :spinning="loading" style="min-height: 200px;">
       <div class="list-content">
       <div class="edit-view">
         <div class="item flex-view">
-          <div class="label">头像</div>
+          <div class="label">Avatar</div>
           <div class="right-box avatar-box flex-view">
             <img v-if="tData.form && tData.form.avatar" :src="tData.form.avatar" class="avatar">
             <img v-else :src="AvatarIcon" class="avatar">
@@ -16,40 +16,40 @@
                   :multiple="false"
                   :before-upload="beforeUpload"
                 >
-                  <label>点击更换头像</label>
+                  <label>click change profile picture</label>
                 </a-upload>
-              <p class="tip">图片格式支持 GIF、PNG、JPEG，尺寸不小于 200 PX，小于 4 MB</p>
+              <p class="tip">the image format supports gif png jpeg and the size is not less than 200 px and less than 4 mb</p>
             </div>
           </div>
         </div>
         <div class="item flex-view">
-          <div class="label">昵称</div>
+          <div class="label">Nickname</div>
           <div class="right-box">
-            <input type="text" v-model="tData.form.nickname" placeholder="请输入昵称" maxlength="20" class="input-dom">
-            <p class="tip">支持中英文，长度不能超过 20 个字符</p>
+            <input type="text" v-model="tData.form.nickname" placeholder="Nickname" maxlength="20" class="input-dom">
+            <p class="tip">it cannot exceed 20 characters in length</p>
           </div>
         </div>
         <div class="item flex-view">
-          <div class="label">手机号</div>
+          <div class="label">PhoneNumber</div>
           <div class="right-box">
-            <input type="text" v-model="tData.form.mobile" placeholder="请输入邮箱" maxlength="100" class="input-dom web-input">
+            <input type="text" v-model="tData.form.mobile" placeholder="PhoneNumber" maxlength="100" class="input-dom web-input">
           </div>
         </div>
         <div class="item flex-view">
-          <div class="label">邮箱</div>
+          <div class="label">E-Mail</div>
           <div class="right-box">
-            <input type="text" v-model="tData.form.email" placeholder="请输入邮箱" maxlength="100" class="input-dom web-input">
+            <input type="text" v-model="tData.form.email" placeholder="email" maxlength="100" class="input-dom web-input">
           </div>
         </div>
         <div class="item flex-view">
-          <div class="label">个人简介</div>
+          <div class="label">Description</div>
           <div class="right-box">
-          <textarea v-model="tData.form.description" placeholder="请输入简介" maxlength="200" class="intro">
+          <textarea v-model="tData.form.description" placeholder="description" maxlength="200" class="intro">
           </textarea>
-            <p class="tip">限制200字以内</p>
+            <p class="tip">it cannot exceed 200 characters in length</p>
           </div>
         </div>
-        <button class="save mg" @click="submit()">保存</button>
+        <button class="save mg" @click="submit()">Save</button>
       </div>
     </div>
     </a-spin>
@@ -97,7 +97,8 @@ const getUserInfo =()=> {
   detailApi({userId: userId}).then(res => {
     tData.form = res.data
     if (tData.form.avatar) {
-      tData.form.avatar = BASE_URL + '/api/staticfiles/avatar/' + tData.form.avatar
+      // tData.form.avatar = BASE_URL + '/api/staticfiles/avatar/' + tData.form.avatar
+      tData.form.avatar = 'data:image/jpeg;base64,' + tData.form.avatar
     }
     loading.value = false
   }).catch(err => {
@@ -125,7 +126,7 @@ const submit =()=> {
     formData.append('description', tData.form.description)
   }
   updateUserInfoApi(formData).then(res => {
-    message.success('保存成功')
+    message.success('success')
     getUserInfo()
   }).catch(err => {
     console.log(err)

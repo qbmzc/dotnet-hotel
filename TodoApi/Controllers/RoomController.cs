@@ -22,9 +22,20 @@ namespace TodoApi.Controllers
 
         // GET: api/Room
         [HttpGet("list")]
-        public async Task<ActionResult<APIResponse<IEnumerable<Room>>>> GetRoom()
+        public async Task<ActionResult<APIResponse<IEnumerable<Room>>>> GetRoom(long? c,
+        string? keyword)
         {
-            List<Room> rooms = await _context.Room.ToListAsync();
+            List<Room>? rooms = null;
+            if (c != null)
+            {
+                rooms = await _context.Room.Where(r => r.ClassificationId == c).ToListAsync();
+            }
+            if (keyword != null)
+            {
+                rooms = await _context.Room.Where(r => r.Title == keyword).ToListAsync();
+            }
+
+            rooms = await _context.Room.ToListAsync();
 
             return Ok(new APIResponse<IEnumerable<Room>> { Data = rooms });
         }
@@ -73,17 +84,19 @@ namespace TodoApi.Controllers
         // POST: api/Room
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("create")]
-        public async Task<ActionResult<APIResponse<Room>>> PostRoom([FromForm] Room room, IFormFile file)
+        public async Task<ActionResult<APIResponse<Room>>> PostRoom([FromForm] Room room, IFormFile imageFile)
         {
 
-            if (file != null && file.Length > 0)
+            if (imageFile != null && imageFile.Length > 0)
             {
-                if (file.FileName.EndsWith(".jpg") || file.FileName.EndsWith(".jpeg")||file.FileName.EndsWith(".png"))
+                if (imageFile.FileName.EndsWith(".jpg") || imageFile.FileName.EndsWith(".jpeg") || imageFile.FileName.EndsWith(".png"))
                 {
-                    string v = await GetBase64StringAsync(file);
+                    string v = await GetBase64StringAsync(imageFile);
                     room.Cover = v;
-                }else{
-                    return Ok(new APIResponse<Room>(){Code=400,Msg="Format not supported"});
+                }
+                else
+                {
+                    return Ok(new APIResponse<Room>() { Code = 400, Msg = "Format not supported" });
                 }
 
             }
@@ -141,14 +154,14 @@ namespace TodoApi.Controllers
             string[] strings = ids.Split(",");
             for (int i = 0; i < strings.Length; i++)
             {
-                var Room = await _context.Room.FindAsync(ids[i]);
-                if (Room == null)
+                var room = await _context.Room.FindAsync(long.Parse(strings[i]));
+                if (room == null)
                 {
                     return Ok(new APIResponse<Room> { Code = 404, Msg = "Not Found" });
 
                 }
 
-                _context.Room.Remove(Room);
+                _context.Room.Remove(room);
             }
 
             await _context.SaveChangesAsync();

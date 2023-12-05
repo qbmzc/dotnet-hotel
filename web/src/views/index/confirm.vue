@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header/>
+    <Header />
     <section class="cart-page flex-view">
       <div class="left-flex">
         <div class="title flex-view">
@@ -20,110 +20,109 @@
                 <h2>{{ pageData.title }}</h2>
               </div>
               <div class="pay">¥{{ pageData.price }}</div>
-              <a-input-number v-model:value="pageData.count" :min="1" :max="10" @change="onCountChange"/>
+              <a-input-number v-model:value="pageData.count" :min="1" :max="10" @change="onCountChange" />
               <img :src="DeleteIcon" class="delete">
             </div>
           </div>
         </div>
-        <div class="title flex-view">
-          <h3>Notes</h3>
-        </div>
-        <textarea v-model="pageData.remark" placeholder="Enter note information, within 100 words" class="remark">
-    </textarea>
+      <div class="title flex-view">
+        <h3>CheckIn</h3>
       </div>
-      <div class="right-flex">
-        <div class="title flex-view">
-        </div>
-        <div class="title flex-view">
-          <h3>Settlement</h3>
-          <span class="click-txt">Price</span>
-        </div>
-        <div class="price-view">
-          <div class="price-item flex-view">
-            <div class="item-name">Total</div>
-            <div class="price-txt">${{ pageData.amount }}</div>
-          </div>
-          <div class="price-item flex-view">
-            <div class="item-name">Preferential</div>
-            <div class="price-txt">$0</div>
-          </div>
-          <div class="price-item flex-view">
-            <div class="item-name">Discount</div>
-            <div class="price-txt">$0</div>
-          </div>
-          <div class="total-price-view flex-view">
-            <span>Amount To</span>
-            <div class="price">
-              <span class="font-big">${{ pageData.amount }}</span>
-            </div>
-          </div>
-          <div class="btns-view">
-            <button class="btn buy" @click="handleBack()">Back</button>
-            <button class="btn pay jiesuan" @click="handleJiesuan()">Settlement</button>
-          </div>
-        </div>
+      <DatePicker v-model:value="pageData.checkIn" :min-date="new Date()" placeholder="check in" class="remark">
+      </DatePicker>
+      <div class="title flex-view">
+        <h3>CheckOut</h3>
       </div>
-    </section>
+      <DatePicker v-model:value="pageData.checkOut" :min-date="new Date()" placeholder="check out" class="remark">
+      </DatePicker>
 
-    <!--选择弹窗区域-->
-    <div>
-      <a-modal
-          :visible="modal.visile"
-          :forceRender="true"
-          :title="modal.title"
-          ok-text="确认"
-          cancel-text="取消"
-          @cancel="handleCancel"
-          @ok="handleOk"
-      >
-        <a-form
-            ref="myform"
-            :label-col="{ style: { width: '80px' } }"
-            :model="modal.form"
-            :rules="modal.rules"
-        >
-          <a-row :gutter="24">
-            <a-col span="24">
-              <a-form-item label="姓名" name="name">
-                <a-input placeholder="请输入" v-model:value="modal.form.name"></a-input>
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
-            <a-col span="24">
-              <a-form-item label="电话号码" name="mobile">
-                <a-input placeholder="请输入" v-model:value="modal.form.mobile"></a-input>
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
-            <a-col span="24">
-              <a-form-item label="送货地址" name="desc">
-                <a-input placeholder="请输入" v-model:value="modal.form.desc"></a-input>
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
-            <a-col span="24">
-              <a-form-item label="默认地址">
-                <a-switch v-model:checked="modal.form.default"></a-switch>
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </a-form>
-      </a-modal>
+      <div class="title flex-view">
+        <h3>Notes</h3>
+      </div>
+      <textarea v-model="pageData.remark" placeholder="Enter note information, within 100 words" class="remark">
+    </textarea>
+  </div>
+  <div class="right-flex">
+    <div class="title flex-view">
+    </div>
+    <div class="title flex-view">
+      <h3>Settlement</h3>
+      <span class="click-txt">Price</span>
+    </div>
+    <div class="price-view">
+      <div class="price-item flex-view">
+        <div class="item-name">Total</div>
+        <div class="price-txt">${{ pageData.amount }}</div>
+      </div>
+      <div class="price-item flex-view">
+        <div class="item-name">Preferential</div>
+        <div class="price-txt">$0</div>
+      </div>
+      <div class="price-item flex-view">
+        <div class="item-name">Discount</div>
+        <div class="price-txt">$0</div>
+      </div>
+      <div class="total-price-view flex-view">
+        <span>Amount To</span>
+        <div class="price">
+          <span class="font-big">${{ pageData.amount }}</span>
+        </div>
+      </div>
+      <div class="btns-view">
+        <button class="btn buy" @click="handleBack()">Back</button>
+        <button class="btn pay jiesuan" @click="handleJiesuan()">Settlement</button>
+      </div>
     </div>
   </div>
+</section>
+
+  <!--选择弹窗区域-->
+  <div>
+    <a-modal :visible="modal.visile" :forceRender="true" :title="modal.title" ok-text="确认" cancel-text="取消"
+      @cancel="handleCancel" @ok="handleOk">
+      <a-form ref="myform" :label-col="{ style: { width: '80px' } }" :model="modal.form" :rules="modal.rules">
+        <a-row :gutter="24">
+          <a-col span="24">
+            <a-form-item label="姓名" name="name">
+              <a-input placeholder="请输入" v-model:value="modal.form.name"></a-input>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col span="24">
+            <a-form-item label="电话号码" name="mobile">
+              <a-input placeholder="请输入" v-model:value="modal.form.mobile"></a-input>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col span="24">
+            <a-form-item label="送货地址" name="desc">
+              <a-input placeholder="请输入" v-model:value="modal.form.desc"></a-input>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col span="24">
+            <a-form-item label="默认地址">
+              <a-switch v-model:checked="modal.form.default"></a-switch>
+            </a-form-item>
+          </a-col>
+        </a-row>
+      </a-form>
+    </a-modal>
+  </div>
+</div>
 </template>
 
 <script setup lang="ts">
-import {message} from "ant-design-vue";
+import { DatePicker, message } from "ant-design-vue";
 import Header from '/@/views/index/components/header.vue'
 import Footer from '/@/views/index/components/footer.vue'
 import DeleteIcon from '/@/assets/images/delete-icon.svg'
-import {createApi} from '/@/api/order'
-import {listApi as listAddressListApi, createApi as createAddressApi} from '/@/api/address'
-import {useUserStore} from "/@/store";
+import { createApi } from '/@/api/order'
+import { listApi as listAddressListApi, createApi as createAddressApi } from '/@/api/address'
+import { useUserStore } from "/@/store";
 
 const router = useRouter();
 const route = useRoute();
@@ -136,6 +135,8 @@ const pageData = reactive({
   cover: undefined,
   price: undefined,
   remark: undefined,
+  checkIn: '',
+  checkOut: '',
   count: 1,
   amount: undefined,
   receiverName: undefined,
@@ -155,7 +156,7 @@ const modal = reactive({
     default: undefined
   },
   rules: {
-    name: [{required: true, message: '请输入', trigger: 'change'}],
+    name: [{ required: true, message: 'please enter', trigger: 'change' }],
   },
 })
 
@@ -176,7 +177,7 @@ const handleAdd = () => {
   resetModal();
   modal.visile = true;
   modal.editFlag = false;
-  modal.title = '新增';
+  modal.title = 'New';
   // 重置
   for (const key in modal.form) {
     modal.form[key] = undefined;
@@ -184,38 +185,38 @@ const handleAdd = () => {
 };
 
 const handleOk = () => {
-  if(!userStore.user_id){
-    message.warn('请先登录')
+  if (!userStore.user_id) {
+    message.warn('Please LogIn First')
     return
   }
   myform.value?.validate()
-      .then(() => {
-        const formData = new FormData()
-        formData.append('userId', userStore.user_id)
-        formData.append('def', modal.form.default ? '1':'0')
-        if (modal.form.name) {
-          formData.append('name', modal.form.name)
-        }
-        if (modal.form.mobile) {
-          formData.append('mobile', modal.form.mobile)
-        }
-        if (modal.form.desc) {
-          formData.append('description', modal.form.desc)
-        }
-        createAddressApi(formData).then(res => {
-          console.log(res)
-          hideModal()
-          pageData.receiverName = modal.form.name
-          pageData.receiverAddress = modal.form.desc
-          pageData.receiverPhone = modal.form.mobile
-        }).catch(err => {
-          message.error(err.msg || '新建失败')
-        })
+    .then(() => {
+      const formData = new FormData()
+      formData.append('userId', userStore.user_id)
+      formData.append('def', modal.form.default ? '1' : '0')
+      if (modal.form.name) {
+        formData.append('name', modal.form.name)
+      }
+      if (modal.form.mobile) {
+        formData.append('mobile', modal.form.mobile)
+      }
+      if (modal.form.desc) {
+        formData.append('description', modal.form.desc)
+      }
+      createAddressApi(formData).then(res => {
+        console.log(res)
+        hideModal()
+        pageData.receiverName = modal.form.name
+        pageData.receiverAddress = modal.form.desc
+        pageData.receiverPhone = modal.form.mobile
+      }).catch(err => {
+        message.error(err.msg || 'the new creation failed')
       })
-      .catch((err) => {
-        console.log(err);
-        console.log('不能为空');
-      });
+    })
+    .catch((err) => {
+      console.log(err);
+      console.log('it can t be empty');
+    });
 };
 
 const handleCancel = () => {
@@ -238,7 +239,7 @@ const onCountChange = (value) => {
 
 const listAddressData = () => {
   let userId = userStore.user_id
-  listAddressListApi({userId: userId}).then(res => {
+  listAddressListApi({ userId: userId }).then(res => {
 
     if (res.data.length > 0) {
       pageData.receiverName = res.data[0].name
@@ -265,13 +266,16 @@ const handleJiesuan = () => {
   const formData = new FormData()
   let userId = userStore.user_id
   if (!userId) {
-    message.warn('请先登录！')
+    message.warn('please login first')
     return
   }
-  // if (!pageData.receiverName) {
-  //   message.warn('请选择地址！')
-  //   return
-  // }
+  const checkIn = pageData.checkIn;
+  const checkOut =pageData.checkOut;
+  console.log('check '+checkIn+'-'+checkOut );
+  if (checkIn > checkOut) {
+    message.warn('check in time is not possible for late check out time')
+    return
+  }
   formData.append('userId', userId)
   formData.append('thingId', pageData.id)
   formData.append('count', pageData.count)
@@ -280,10 +284,10 @@ const handleJiesuan = () => {
   }
   console.log(formData)
   createApi(formData).then(res => {
-    message.success('请支付订单')
-    router.push({'name': 'pay', query: {'amount': pageData.amount}})
+    message.success('please pay for the order')
+    router.push({ 'name': 'pay', query: { 'amount': pageData.amount } })
   }).catch(err => {
-    message.error(err.msg || '失败')
+    message.error(err.msg || 'fail')
   })
 
 }
@@ -292,7 +296,6 @@ const handleJiesuan = () => {
 </script>
 
 <style scoped lang="less">
-
 .flex-view {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -347,7 +350,9 @@ const handleJiesuan = () => {
       margin-right: 20px;
     }
 
-    .line-2, .pc-style .cart-list-view .list-th .line-3, .pc-style .cart-list-view .list-th .line-4 {
+    .line-2,
+    .pc-style .cart-list-view .list-th .line-3,
+    .pc-style .cart-list-view .list-th .line-4 {
       width: 65px;
       margin-right: 20px;
     }
@@ -572,5 +577,4 @@ const handleJiesuan = () => {
   }
 
 }
-
 </style>

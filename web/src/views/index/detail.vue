@@ -190,7 +190,7 @@ const userStore = useUserStore();
 let thingId = ref('')
 let detailData = ref({})
 let tabUnderLeft = ref(6)
-let tabData = ref(['简介', '评论'])
+let tabData = ref(['Brief Introduction'])
 let selectTabIndex = ref(0)
 
 let commentData = ref([])

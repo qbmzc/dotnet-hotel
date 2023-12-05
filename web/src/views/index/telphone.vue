@@ -1,21 +1,20 @@
 <script setup>
 defineProps({
   phonePrefix: String,
-  phoneNumber: String
+  mobile: String
 })
 
-defineEmits(['update:phonePrefix', 'update:phoneNumber'])
+// defineEmits(['update:mobile'])
 </script>
 
 <template>
-  <input
-    type="text"
+  <input maxlength="4" readonly="readonly"
+    type="text" required="required"
     :value="phonePrefix"
-    @input="$emit('update:phonePrefix', $event.target.value)"
-  />
-  <input
-    type="text"
-    :value="phoneNumber"
-    @input="$emit('update:phoneNumber', $event.target.value)"
+  /><span>-</span>
+  <input required="required"
+    type="text" 
+    :value="mobile"
+   
   />
 </template>

@@ -20,7 +20,7 @@ namespace TodoApi.Controllers
             _context = context;
         }
 
-        
+
         // GET: api/Room
         [HttpGet("list")]
         public async Task<ActionResult<APIResponse<IEnumerable<Classification>>>> GetClassification()
@@ -45,13 +45,10 @@ namespace TodoApi.Controllers
 
         // PUT: api/Classification/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutClassification(long id, Classification classification)
+        [HttpPost("update")]
+        public async Task<ActionResult<APIResponse<Classification>>> PutClassification(Classification classification)
         {
-            if (id != classification.Id)
-            {
-                return BadRequest();
-            }
+
 
             _context.Entry(classification).State = EntityState.Modified;
 
@@ -61,9 +58,9 @@ namespace TodoApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClassificationExists(id))
+                if (!ClassificationExists(classification.Id))
                 {
-                    return NotFound();
+                    return Ok(new APIResponse<Classification> { Code = 404, Msg = "Not Found" });
                 }
                 else
                 {
@@ -71,34 +68,41 @@ namespace TodoApi.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(new APIResponse<Classification>() { });
         }
 
         // POST: api/Classification
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Classification>> PostClassification(Classification classification)
+        [HttpPost("create")]
+        public async Task<ActionResult<APIResponse<Classification>>> PostClassification([FromForm] Classification classification)
         {
             _context.Classification.Add(classification);
             await _context.SaveChangesAsync();
+            return Ok(new APIResponse<Classification> { Data = classification });
 
-            return CreatedAtAction("GetClassification", new { id = classification.Id }, classification);
         }
 
         // DELETE: api/Classification/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteClassification(long id)
+        [HttpPost("delete")]
+        public async Task<ActionResult<APIResponse<Classification>>> DeleteClassification([FromQuery]string ids)
         {
-            var classification = await _context.Classification.FindAsync(id);
-            if (classification == null)
+
+            string[] strings = ids.Split(",");
+            for (int i = 0; i < strings.Length; i++)
             {
-                return NotFound();
+                var room = await _context.Classification.FindAsync(long.Parse(strings[i]));
+                if (room == null)
+                {
+                    return Ok(new APIResponse<Classification> { Code = 404, Msg = "Not Found" });
+
+                }
+
+                _context.Classification.Remove(room);
             }
 
-            _context.Classification.Remove(classification);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new APIResponse<Classification> { });
         }
 
         private bool ClassificationExists(long id)
