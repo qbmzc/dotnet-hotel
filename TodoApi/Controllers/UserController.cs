@@ -163,6 +163,9 @@ namespace TodoApi.Controllers
                 return Ok(new APIResponse<User> { Code = 404, Msg = "user is not found" });
             }
 
+            if(user.Role!="0"){
+                return Ok(new APIResponse<User>{Code=413,Msg="forbidden"});
+            }
             responseUser.Password = null;
             responseUser.RePassword = null;
             return Ok(new APIResponse<User> { Data = responseUser });

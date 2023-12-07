@@ -36,6 +36,10 @@
             >
               <a-button type="primary" size="small" style="margin-right: 24px;">ToPay</a-button>
             </a-popconfirm>
+            <div v-if="item.status==='2'">
+              <a href="https://z1.ax1x.com/2023/12/08/pigooFK.jpg" target="_blank" title="Invoice">Invoice</a>
+            </div>
+            
             
             <span class="text">OrderStatus</span>
             <span class="state">{{item.status==='1'? 'Pending': item.status === '2'? 'Paid':'Canceled'}}</span>
