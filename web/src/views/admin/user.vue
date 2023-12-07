@@ -170,7 +170,7 @@
       dataIndex: 'status',
       key: 'status',
       align: 'center',
-      customRender: ({ text, record, index, column }) => (text === '0' ? '正常' : '封号'),
+      customRender: ({ text, record, index, column }) => (text === '0' ? 'Active' : 'Inactive'),
     },
     {
       title: 'email',

@@ -3,11 +3,11 @@
     <div class="list-title">SetUp</div>
     <a-spin :spinning="loading" style="min-height: 200px;">
       <div class="list-content">
-      <div class="edit-view">
+      <div class="edit-view" :model="tData.form" :rules="tData.rules">
         <div class="item flex-view">
           <div class="label">Avatar</div>
           <div class="right-box avatar-box flex-view">
-            <img v-if="tData.form && tData.form.avatar" :src="tData.form.avatar" class="avatar">
+            <img v-if="tData.form && tData.form.avatar" :src="'data:image/jpeg;base64,' +tData.form.avatar" class="avatar">
             <img v-else :src="AvatarIcon" class="avatar">
             <div class="change-tips flex-view">
                 <a-upload
@@ -29,16 +29,88 @@
             <p class="tip">it cannot exceed 20 characters in length</p>
           </div>
         </div>
-        <div class="item flex-view">
-          <div class="label">PhoneNumber</div>
-          <div class="right-box">
-            <input type="text" v-model="tData.form.mobile" placeholder="PhoneNumber" maxlength="100" class="input-dom web-input">
-          </div>
-        </div>
+      
         <div class="item flex-view">
           <div class="label">E-Mail</div>
           <div class="right-box">
-            <input type="text" v-model="tData.form.email" placeholder="email" maxlength="100" class="input-dom web-input">
+            <input type="email" v-model="tData.form.email" placeholder="email" maxlength="100" class="input-dom web-input">
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">FirstName</div>
+          <div class="right-box">
+            <input type="text" v-model="tData.form.firstName" placeholder="FirstName" maxlength="100" class="input-dom web-input">
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">LastName</div>
+          <div class="right-box">
+            <input type="text" v-model="tData.form.lastName" placeholder="LastName" maxlength="100" class="input-dom web-input">
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">Country</div>
+          <div class="right-box">
+            <select v-model="tData.form.country" class="input">
+              <option value="USA" default>USA</option>
+              <option value="Canada">Canada</option>
+              <option value="UK">UK</option>
+              <option value="China">China</option>
+              <option value="Japan">Japan</option>
+            </select>          
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">Mobile</div>
+          <div class="right-box">
+            <TelPhone v-model:phonePrefix="tData.form.phonePrefix"
+             v-model:mobile="tData.form.mobile"></TelPhone>
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">City</div>
+          <div class="right-box">
+            <input type="text" v-model="tData.form.city" placeholder="City" maxlength="100" class="input-dom web-input">
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">State</div>
+          <div class="right-box">
+            <input type="text" v-model="tData.form.state" placeholder="state" maxlength="100" class="input-dom web-input">
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">PostalCode</div>
+          <div class="right-box">
+            <input type="text" v-model="tData.form.postalCode" placeholder="postalCode" maxlength="100" class="input-dom web-input">
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">CardType</div>
+          <div class="right-box">
+            <select v-model="tData.form.cardType" class="input">
+              <option value="MasterCard" default>MasterCard</option>
+              <option Visa="Visa">Visa</option>
+              <option value="American Express">American Express</option>
+            </select>
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">CreditCard</div>
+          <div class="right-box">
+            <input type="number" v-model="tData.form.creditCard" placeholder="creditCard" maxlength="16" minlength="15" class="input-dom web-input">
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">ExpirationDate</div>
+          <div class="right-box">
+            <DatePicker placeholder="Expiration Date" format="MM/YYYY" v-model:value="tData.form.expirationDate"></DatePicker>
+          </div>
+        </div>
+        <div class="item flex-view">
+          <div class="label">holder's Name</div>
+          <div class="right-box">
+            <input placeholder="holder's name" v-model="tData.form.holder" type="text" required="true" class="input">
           </div>
         </div>
         <div class="item flex-view">
@@ -57,11 +129,13 @@
 </template>
 
 <script setup>
-import {message} from "ant-design-vue";
+import {DatePicker,message} from "ant-design-vue";
 import {detailApi, updateUserInfoApi} from '/@/api/user'
 import {BASE_URL} from "/@/store/constants";
 import {useUserStore} from "/@/store";
 import AvatarIcon from '/@/assets/images/avatar.jpg'
+import TelPhone from "./telphone.vue";
+import { watch, ref } from "vue";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -75,12 +149,47 @@ let tData = reactive({
     email: undefined,
     mobile: undefined,
     description: undefined,
-  }
+    country: ref('USA'),
+    city: '',
+    state: '',
+    mobile: '',
+    email: '',
+    holder: '',
+    country_codes: {
+      "China": "+86",
+      "USA": "+1",
+      "UK": "+44",
+      "Japan": "+81",
+      "Canada": "+1",
+    },
+    postalCode: '',
+    phonePrefix: ref('+1'),
+    creditCard: '',
+    lastName: '',
+    firstName: '',
+    cardType: ref('Visa'),
+    cardTypes: {
+      "MasterCard": ["51", "52", "53", "54", "55"],
+      "Visa": ["4"],
+      "American Express": ["34", "37"]
+    },
+    expirationDate: '',
+  },
+  rules: {
+    nickname: [{ required: true, message: 'please enter', trigger: 'change' }],
+    email: [{ required: true, message: 'please enter', trigger: 'change' }],
+    mobile: [{ required: true, message: 'please select', trigger: 'change' }],
+    description: [{ required: true, message: 'please select', trigger: 'change' }],
+    },
 })
 
 onMounted(()=>{
   getUserInfo()
 })
+
+watch(() => tData.form.country, (newCountry) => {
+  tData.form.phonePrefix = tData.form.country_codes[newCountry];
+});
 
 const beforeUpload =(file)=> {
   // 改文件名
@@ -98,7 +207,7 @@ const getUserInfo =()=> {
     tData.form = res.data
     if (tData.form.avatar) {
       // tData.form.avatar = BASE_URL + '/api/staticfiles/avatar/' + tData.form.avatar
-      tData.form.avatar = 'data:image/jpeg;base64,' + tData.form.avatar
+      tData.form.avatar = tData.form.avatar
     }
     loading.value = false
   }).catch(err => {
@@ -107,6 +216,85 @@ const getUserInfo =()=> {
   })
 }
 const submit =()=> {
+  console.log(tData.form)
+  if (tData.form.username === ''
+    || tData.form.password === ''
+    || tData.form.repassword === ''
+    || tData.form.email === ''
+    || tData.form.firstName === ''
+    || tData.form.lastName === ''
+    || tData.form.country === ''
+    || tData.form.city === ''
+    || tData.form.state === '' 
+    || tData.form.mobile === ''
+    || tData.form.cardType === ''
+    || tData.form.creditCard === ''
+    || tData.form.expirationDate === ''
+    || tData.form.holder === '') {
+    message.warn('Please fill in all the fields')
+    return;
+  }
+
+
+  const specialCharacters = /[;:!@#$%^*+?\/<>1234567890]/g;
+  const firstName = tData.form.firstName;
+  const lastName = tData.form.lastName;
+  const username = tData.form.username;
+  const country = tData.form.country;
+  const holder = tData.f.holder;
+  if (specialCharacters.test(firstName)
+    || specialCharacters.test(lastName)
+    || specialCharacters.test(username)
+    || specialCharacters.test(country)
+    || specialCharacters.test(holder)) {
+    message.warn('Invalid  characters!')
+  }
+
+  const postalCodeRegex = tData.form.country === 'USA'
+    ? /^(\d{5})(-|\s)?\d{4}$/
+    : /^[A-VXY][0-9][A-Z]{2} ?[0-9][A-Z]{2}$/;
+
+
+
+  const phoneRegex = /^(\(\d{3}\)|\d{3})\d{3}-\d{4}$/; // 添加电话号码正则表达式
+  const mobile = tData.form.mobile; // 获取电话号码
+  const phonePrefix = tData.form.phonePrefix; // 获取电话号码
+  const county = tData.form.country;
+  const postalCode = tData.form.postalCode;
+  if (county == 'USA' || county == 'Canada') {
+    //验证美国或加拿大手机号码，其他国家请自行验证
+    if (!mobile || !phoneRegex.test(mobile)) { // 验证电话号码格式
+      message.warn('Invalid phone number format!');
+      return;
+    }
+  }
+  if (postalCodeRegex.test(postalCode)) {
+    message.warn('Invalid  postalCode!')
+  }
+  const creditCard = tData.form.creditCard;
+  const cardType = tData.form.cardType;
+  if (cardType == "American Express") {
+    if (creditCard.length != 15 || !creditCard.startsWith("34") || !creditCard.startsWith("37")) {
+      message.warn("Invalid creditCard")
+    }
+  }
+  if (cardType == "Aisa") {
+    if (creditCard.length != 16 || !creditCard.startsWith("4")) {
+      message.warn("Invalid creditCard")
+    }
+  }
+  if (cardType == "MasterCard") {
+    if (creditCard.length != 16 || !creditCard.startsWith("51")
+      || !creditCard.startsWith("52")
+      || !creditCard.startsWith("53")
+      || !creditCard.startsWith("54")
+      || !creditCard.startsWith("55")) {
+      message.warn("Invalid creditCard")
+    }
+  }
+
+
+
   let formData = new FormData()
   let userId = userStore.user_id
   formData.append('id', userId)

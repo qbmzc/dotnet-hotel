@@ -36,10 +36,10 @@
         <button class="login btn hidden-sm" @click="goLogin()">Login</button>
       </template>
 
-      <div class="right-icon" @click="msgVisible=true">
+      <!-- <div class="right-icon" @click="msgVisible=true">
         <img :src="MessageIcon">
         <span class="msg-point" style=""></span>
-      </div>
+      </div> -->
       <!-- <div>
         <a-drawer
             title="Message"
