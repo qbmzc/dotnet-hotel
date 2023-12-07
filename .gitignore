@@ -34,3 +34,4 @@ TodoApi/bin/*
 ./vscode
 ./vs
 TodoApi/bin/Debug/*
+.vs/dotnet-hotel/*.vsidx
