@@ -39,6 +39,7 @@ builder.Services.AddCors(options =>
 
 3. 在[TodoApi\appsettings.json](TodoApi\appsettings.json)中配置连接字符串`MyContext`
 
+转义字符使用`\`
 ```json
 {
   "Logging": {
@@ -49,7 +50,7 @@ builder.Services.AddCors(options =>
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "MyContext": "Data Source=(LocalDB)/MSSQLLocalDB;AttachDbFilename=TodoApi/db/hotel.db.mdf;Integrated Security=True;Connect Timeout=30"
+    "MyContext": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=hotel.db;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"
   }
 }
 ```

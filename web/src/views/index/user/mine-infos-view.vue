@@ -51,11 +51,11 @@
       <div class="title">Settings</div>
       <div class="list">
         <div class="mine-item flex-view" @click="clickMenu('userInfoEditView')">
-          <img :src="SettingIconImage" alt="编辑资料">
+          <img :src="SettingIconImage" alt="edit your profile">
           <span>Profile</span>
         </div>
         <div class="mine-item flex-view" @click="clickMenu('securityView')">
-          <img :src="SafeIconImage" alt="账号安全">
+          <img :src="SafeIconImage" alt="security">
           <span>Security</span>
         </div>
         <!-- <div class="mine-item flex-view" @click="clickMenu('pushView')">
@@ -82,8 +82,6 @@ import SafeIconImage from '/@/assets/images/setting-safe-icon.svg'
 import PushIconImage from '/@/assets/images/setting-push-icon.svg'
 import MessageIconImage from '/@/assets/images/setting-msg-icon.svg'
 
-import {userCollectListApi} from '/@/api/thingCollect'
-import {userWishListApi} from '/@/api/thingWish'
 import {useUserStore} from '/@/store';
 const userStore = useUserStore();
 const router = useRouter();
@@ -93,29 +91,11 @@ let collectCount = ref(0)
 let wishCount = ref(0)
 
 onMounted(()=>{
-  getCollectThingList()
-  getWishThingList()
+
 })
 
 const clickMenu =(name)=> {
   router.push({name: name})
-}
-const getCollectThingList =()=> {
-  let userId = userStore.user_id
-  userCollectListApi({userId: userId}).then(res => {
-    collectCount.value = res.data.length
-  }).catch(err => {
-    console.log(err.msg)
-  })
-}
-
-const getWishThingList =()=> {
-  let userId = userStore.user_id
-  userWishListApi({userId: userId}).then(res => {
-    wishCount.value = res.data.length
-  }).catch(err => {
-    console.log(err.msg)
-  })
 }
 
 </script>

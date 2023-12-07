@@ -31,9 +31,19 @@ namespace TodoApi.Controllers
 
         // GET: api/Order
         [HttpGet("userOrderList")]
-        public async Task<ActionResult<APIResponse<IEnumerable<Room>>>> GetUserOrder(string userId, string status)
+        public async Task<ActionResult<APIResponse<IEnumerable<Room>>>> GetUserOrder(long userId, string? status)
         {
-            List<Order> orders = await _context.Order.Where(o => o.UserId == userId && o.Status == status).ToListAsync();
+            List<Order>? orders = null;
+            if (status == null)
+            {
+                orders = await _context.Order.Where(o => o.UserId == userId).ToListAsync();
+
+            }
+            else
+            {
+                orders = await _context.Order.Where(o => o.UserId == userId && o.Status == status).ToListAsync();
+
+            }
 
             return Ok(new APIResponse<IEnumerable<Order>> { Data = orders });
         }
@@ -55,7 +65,7 @@ namespace TodoApi.Controllers
         // PUT: api/Order/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("update")]
-        public async Task<ActionResult<APIResponse<Order>>> PutOrder([FromForm]Order order)
+        public async Task<ActionResult<APIResponse<Order>>> PutOrder([FromForm] Order order)
         {
             if (0 == order.Id)
             {
@@ -121,7 +131,7 @@ namespace TodoApi.Controllers
             return Ok(new APIResponse<Order> { Msg = "order is canceled" });
         }
 
-  // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("payUserOrder")]
         public async Task<ActionResult<APIResponse<Order>>> PayOrder(long id)
         {
@@ -136,7 +146,8 @@ namespace TodoApi.Controllers
                 return Ok(new APIResponse<Order> { Code = 403, Msg = "order is null" });
 
             }
-
+            order.OrderTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            order.PayTime = Guid.NewGuid().ToString();
             order.Status = "2";//2 支付
             _context.Entry(order).State = EntityState.Modified;
 
@@ -204,6 +215,9 @@ namespace TodoApi.Controllers
             order.Status = "1";
             order.OrderTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             order.OrderNumber = Guid.NewGuid().ToString();
+            User? user = await _context.User.FindAsync(order.UserId);
+            Console.WriteLine(user.Username);
+            order.Username = user == null ? "" : user.Username;
             _context.Order.Add(order);
             await _context.SaveChangesAsync();
 
@@ -216,7 +230,7 @@ namespace TodoApi.Controllers
         [HttpPost("delete")]
         public async Task<ActionResult<APIResponse<Order>>> DeleteOrder(string ids)
         {
-           string[] strings = ids.Split(",");
+            string[] strings = ids.Split(",");
             for (int i = 0; i < strings.Length; i++)
             {
                 var room = await _context.Order.FindAsync(long.Parse(strings[i]));

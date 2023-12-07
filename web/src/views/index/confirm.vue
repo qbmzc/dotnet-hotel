@@ -19,100 +19,64 @@
                 <img :src="pageData.cover">
                 <h2>{{ pageData.title }}</h2>
               </div>
-              <div class="pay">¥{{ pageData.price }}</div>
+              <div class="pay">${{ pageData.price }}</div>
               <a-input-number v-model:value="pageData.count" :min="1" :max="10" @change="onCountChange" />
               <img :src="DeleteIcon" class="delete">
             </div>
           </div>
         </div>
-      <div class="title flex-view">
-        <h3>CheckIn</h3>
-      </div>
-      <DatePicker v-model:value="pageData.checkIn" :min-date="new Date()" placeholder="check in" class="remark">
-      </DatePicker>
-      <div class="title flex-view">
-        <h3>CheckOut</h3>
-      </div>
-      <DatePicker v-model:value="pageData.checkOut" :min-date="new Date()" placeholder="check out" class="remark">
-      </DatePicker>
+        <div class="title flex-view">
+          <h3>CheckIn</h3>
+        </div>
+        <DatePicker v-model:value="modal.form.checkIn" :min-date="new Date()" placeholder="check in" class="remark">
+        </DatePicker>
+        <div class="title flex-view">
+          <h3>CheckOut</h3>
+        </div>
+        <DatePicker v-model:value="modal.form.checkOut" :min-date="new Date()" placeholder="check out" class="remark">
+        </DatePicker>
 
-      <div class="title flex-view">
-        <h3>Notes</h3>
-      </div>
-      <textarea v-model="pageData.remark" placeholder="Enter note information, within 100 words" class="remark">
+        <div class="title flex-view">
+          <h3>Notes</h3>
+        </div>
+        <textarea v-model="pageData.remark" placeholder="Enter note information, within 100 words" class="remark">
     </textarea>
-  </div>
-  <div class="right-flex">
-    <div class="title flex-view">
-    </div>
-    <div class="title flex-view">
-      <h3>Settlement</h3>
-      <span class="click-txt">Price</span>
-    </div>
-    <div class="price-view">
-      <div class="price-item flex-view">
-        <div class="item-name">Total</div>
-        <div class="price-txt">${{ pageData.amount }}</div>
       </div>
-      <div class="price-item flex-view">
-        <div class="item-name">Preferential</div>
-        <div class="price-txt">$0</div>
-      </div>
-      <div class="price-item flex-view">
-        <div class="item-name">Discount</div>
-        <div class="price-txt">$0</div>
-      </div>
-      <div class="total-price-view flex-view">
-        <span>Amount To</span>
-        <div class="price">
-          <span class="font-big">${{ pageData.amount }}</span>
+      <div class="right-flex">
+        <div class="title flex-view">
+        </div>
+        <div class="title flex-view">
+          <h3>Settlement</h3>
+          <span class="click-txt">Price</span>
+        </div>
+        <div class="price-view">
+          <div class="price-item flex-view">
+            <div class="item-name">Total</div>
+            <div class="price-txt">${{ pageData.price }}</div>
+          </div>
+          <div class="price-item flex-view">
+            <div class="item-name">Preferential</div>
+            <div class="price-txt">$0</div>
+          </div>
+          <div class="price-item flex-view">
+            <div class="item-name">Discount</div>
+            <div class="price-txt">$0</div>
+          </div>
+          <div class="total-price-view flex-view">
+            <span>Amount To</span>
+            <div class="price">
+              <span class="font-big">${{ pageData.amount }}</span>
+            </div>
+          </div>
+          <div class="btns-view">
+            <button class="btn buy" @click="handleBack()">Back</button>
+            <button class="btn pay jiesuan" @click="handleJiesuan()">Settlement</button>
+          </div>
         </div>
       </div>
-      <div class="btns-view">
-        <button class="btn buy" @click="handleBack()">Back</button>
-        <button class="btn pay jiesuan" @click="handleJiesuan()">Settlement</button>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-  <!--选择弹窗区域-->
-  <div>
-    <a-modal :visible="modal.visile" :forceRender="true" :title="modal.title" ok-text="确认" cancel-text="取消"
-      @cancel="handleCancel" @ok="handleOk">
-      <a-form ref="myform" :label-col="{ style: { width: '80px' } }" :model="modal.form" :rules="modal.rules">
-        <a-row :gutter="24">
-          <a-col span="24">
-            <a-form-item label="姓名" name="name">
-              <a-input placeholder="请输入" v-model:value="modal.form.name"></a-input>
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="24">
-          <a-col span="24">
-            <a-form-item label="电话号码" name="mobile">
-              <a-input placeholder="请输入" v-model:value="modal.form.mobile"></a-input>
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="24">
-          <a-col span="24">
-            <a-form-item label="送货地址" name="desc">
-              <a-input placeholder="请输入" v-model:value="modal.form.desc"></a-input>
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="24">
-          <a-col span="24">
-            <a-form-item label="默认地址">
-              <a-switch v-model:checked="modal.form.default"></a-switch>
-            </a-form-item>
-          </a-col>
-        </a-row>
-      </a-form>
-    </a-modal>
   </div>
-</div>
 </template>
 
 <script setup lang="ts">
@@ -121,7 +85,6 @@ import Header from '/@/views/index/components/header.vue'
 import Footer from '/@/views/index/components/footer.vue'
 import DeleteIcon from '/@/assets/images/delete-icon.svg'
 import { createApi } from '/@/api/order'
-import { listApi as listAddressListApi, createApi as createAddressApi } from '/@/api/address'
 import { useUserStore } from "/@/store";
 
 const router = useRouter();
@@ -135,8 +98,6 @@ const pageData = reactive({
   cover: undefined,
   price: undefined,
   remark: undefined,
-  checkIn: '',
-  checkOut: '',
   count: 1,
   amount: undefined,
   receiverName: undefined,
@@ -153,7 +114,9 @@ const modal = reactive({
     name: undefined,
     mobile: undefined,
     desc: undefined,
-    default: undefined
+    default: undefined,
+    checkIn: '',
+    checkOut: '',
   },
   rules: {
     name: [{ required: true, message: 'please enter', trigger: 'change' }],
@@ -169,8 +132,6 @@ onMounted(() => {
   pageData.cover = route.query.cover
   pageData.price = route.query.price
   pageData.amount = pageData.price
-
-  listAddressData()
 })
 
 const handleAdd = () => {
@@ -200,18 +161,17 @@ const handleOk = () => {
       if (modal.form.mobile) {
         formData.append('mobile', modal.form.mobile)
       }
+      if (modal.form.checkIn) {
+        formData.append('checkIn', modal.form.checkIn)
+      }
+      if (modal.form.checkOut) {
+        formData.append('checkOut', modal.form.checkOut)
+      }
+       
+  
       if (modal.form.desc) {
         formData.append('description', modal.form.desc)
       }
-      createAddressApi(formData).then(res => {
-        console.log(res)
-        hideModal()
-        pageData.receiverName = modal.form.name
-        pageData.receiverAddress = modal.form.desc
-        pageData.receiverPhone = modal.form.mobile
-      }).catch(err => {
-        message.error(err.msg || 'the new creation failed')
-      })
     })
     .catch((err) => {
       console.log(err);
@@ -237,26 +197,7 @@ const onCountChange = (value) => {
   pageData.amount = pageData.price * value
 }
 
-const listAddressData = () => {
-  let userId = userStore.user_id
-  listAddressListApi({ userId: userId }).then(res => {
 
-    if (res.data.length > 0) {
-      pageData.receiverName = res.data[0].name
-      pageData.receiverPhone = res.data[0].mobile
-      pageData.receiverAddress = res.data[0].description
-      res.data.forEach(item => {
-        if (item.default) {
-          pageData.receiverName = item.name
-          pageData.receiverPhone = item.mobile
-          pageData.receiverAddress = item.description
-        }
-      })
-    }
-  }).catch(err => {
-    console.log(err)
-  })
-}
 
 const handleBack = () => {
   router.back()
@@ -269,23 +210,30 @@ const handleJiesuan = () => {
     message.warn('please login first')
     return
   }
-  const checkIn = pageData.checkIn;
-  const checkOut =pageData.checkOut;
-  console.log('check '+checkIn+'-'+checkOut );
+  const checkIn = modal.form.checkIn;
+  const checkOut =  modal.form.checkOut;
+  console.log('check ' + checkIn + '-' + checkOut);
   if (checkIn > checkOut) {
     message.warn('check in time is not possible for late check out time')
     return
   }
+  formData.append('checkIn',checkIn)
+  formData.append('checkOut',checkOut)
   formData.append('userId', userId)
   formData.append('thingId', pageData.id)
   formData.append('count', pageData.count)
+  formData.append('price', pageData.price)
+   
+   formData.append('title', pageData.title)
+
+   formData.append('cover', pageData.cover)
   if (pageData.remark) {
     formData.append('remark', pageData.remark)
   }
   console.log(formData)
   createApi(formData).then(res => {
     message.success('please pay for the order')
-    router.push({ 'name': 'pay', query: { 'amount': pageData.amount } })
+    router.push({ 'name': 'pay', query: { 'amount': pageData.amount ,"orderId":res.data.id} })
   }).catch(err => {
     message.error(err.msg || 'fail')
   })

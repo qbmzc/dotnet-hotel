@@ -106,29 +106,7 @@ namespace TodoApi.Controllers
             return Ok(new APIResponse<Room> { Data = room });
         }
 
-        [HttpPost("upload")]
-        public async Task<IActionResult> SaveImage(IFormFile image)
-        {
-            if (image == null || image.Length == 0)
-            {
-                return BadRequest("请选择一个图片文件");
-            }
 
-            // 将图片文件转换为base64字符串
-            var base64String = await GetBase64StringAsync(image);
-
-            // 将base64字符串保存到数据库中
-            var result = await SaveBase64StringToDatabase(base64String);
-
-            if (result)
-            {
-                return Ok("图片上传成功");
-            }
-            else
-            {
-                return BadRequest("图片上传失败");
-            }
-        }
         //将图片文件转换成base64字符串
         private async Task<string> GetBase64StringAsync(IFormFile image)
         {
@@ -139,13 +117,6 @@ namespace TodoApi.Controllers
             }
         }
 
-        private async Task<bool> SaveBase64StringToDatabase(string base64String)
-        {
-            Console.WriteLine(base64String);
-            // 这里需要根据实际情况编写将base64字符串保存到数据库的逻辑
-            // 例如，使用Entity Framework或其他ORM框架将数据插入到数据库中
-            return true; // 返回true表示保存成功，返回false表示保存失败
-        }
 
         // DELETE: api/Room/5
         [HttpPost("delete")]

@@ -52,9 +52,9 @@ namespace TodoApi.Controllers
 
         // GET: api/User
         [HttpGet("detail")]
-        public async Task<ActionResult<APIResponse<User>>> DetailUser(long id)
+        public async Task<ActionResult<APIResponse<User>>> DetailUser(long userId)
         {
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.User.FindAsync(userId);
 
             if (user == null)
             {
@@ -80,7 +80,7 @@ namespace TodoApi.Controllers
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("updateUserInfo")]
-        public async Task<ActionResult<APIResponse<User>>> PutUser([FromForm] User user, IFormFile avatarFile)
+        public async Task<ActionResult<APIResponse<User>>> PutUser([FromForm] User user, IFormFile? avatarFile)
         {
             if (avatarFile != null && avatarFile.Length > 0)
             {
@@ -96,7 +96,26 @@ namespace TodoApi.Controllers
 
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            User? user1 = await _context.User.FindAsync(user.Id);
+            if(user1==null){
+                return Ok(new APIResponse<User>(){Code=404,Msg=" User IS NOT FOUND"});
+            }
+            user1.Email=user.Email;
+            user1.City=user.City;
+            user1.CardType=user.CardType;
+            user1.Country=user.Country;
+            user1.Mobile=user.Mobile;
+            user1.PhonePrefix=user.PhonePrefix;
+            user1.FirstName=user.FirstName;
+            user1.LastName=user.LastName;
+            user1.CreditCard=user.CreditCard;
+            user1.Holder=user.Holder;
+            user1.ExpirationDate=user.ExpirationDate;
+            user1.State=user.State;
+            user1.PostalCode=user.PostalCode;
+            user1.Nickname=user.Nickname;
+
+            _context.Entry(user1).State = EntityState.Modified;
 
             try
             {
@@ -136,7 +155,9 @@ namespace TodoApi.Controllers
             }
             string encryptPwd = EncryptUtils.Encrypt(user.Password);
             user.Password = encryptPwd;
+#pragma warning disable CS8600 // 将 null 字面量或可能为 null 的值转换为非 null 类型。
             User responseUser = await _context.User.FirstOrDefaultAsync(u => u.Username == user.Username && u.Password == encryptPwd);
+#pragma warning restore CS8600 // 将 null 字面量或可能为 null 的值转换为非 null 类型。
             if (responseUser == null)
             {
                 return Ok(new APIResponse<User> { Code = 404, Msg = "user is not found" });
@@ -160,7 +181,9 @@ namespace TodoApi.Controllers
             // User user2 = await _context.User.FirstOrDefaultAsync(u => u.Username == user.Username);
 
 
+#pragma warning disable CS8600 // 将 null 字面量或可能为 null 的值转换为非 null 类型。
             User responseUser = await _context.User.FirstOrDefaultAsync(u => u.Username == user.Username && u.Password == encryptPwd);
+#pragma warning restore CS8600 // 将 null 字面量或可能为 null 的值转换为非 null 类型。
             if (responseUser == null)
             {
                 return Ok(new APIResponse<User> { Code = 404, Msg = "user is not found" });
@@ -179,7 +202,9 @@ namespace TodoApi.Controllers
         public async Task<ActionResult<APIResponse<User>>> PostUser(User user)
         {
 
+#pragma warning disable CS8604 // 引用类型参数可能为 null。
             string encryptPwd = EncryptUtils.Encrypt(user.Password);
+#pragma warning restore CS8604 // 引用类型参数可能为 null。
             user.Password = encryptPwd;
             user.Token = encryptPwd;
             user.Status = "0";
@@ -244,7 +269,9 @@ namespace TodoApi.Controllers
                 return Ok(new APIResponse<User> { Code = 405, Msg = "invalid parameter" });
             }
             //查重复
+#pragma warning disable CS8600 // 将 null 字面量或可能为 null 的值转换为非 null 类型。
             User user2 = await _context.User.FirstOrDefaultAsync(u => u.Username == user.Username);
+#pragma warning restore CS8600 // 将 null 字面量或可能为 null 的值转换为非 null 类型。
             if (user2 != null)
             {
                 return Ok(new APIResponse<User> { Code = 405, Msg = "repeat of user name" });
@@ -274,7 +301,9 @@ namespace TodoApi.Controllers
         {
 
             var resuser = await _context.User.FindAsync(id);
+#pragma warning disable CS8602 // 解引用可能出现空引用。
             resuser.Password = null;
+#pragma warning restore CS8602 // 解引用可能出现空引用。
             return resuser;
         }
 

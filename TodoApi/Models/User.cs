@@ -15,6 +15,7 @@ public class User
     // public string? RePassword { get; set; }
     public string? Nickname { get; set; }
     public string? Mobile { get; set; }
+    public string? PhonePrefix { get; set; }
     public string? Email { get; set; }
     public string? Description { get; set; }
     public string? Role { get; set; }

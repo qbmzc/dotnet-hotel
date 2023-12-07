@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 
-// import zhCN from 'ant-design-vue/es/locale/zh_CN';
+// import zhCN from 'ant-design-vue/es/locale/en_US';
 
 </script>
 

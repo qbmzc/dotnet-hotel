@@ -12,7 +12,7 @@
         <div class="common-input">
           <img :src="MailIcon" class="left-icon">
           <div class="input-view">
-            <input placeholder="Please Enter E-Mail Address" v-model="pageData.loginForm.username" type="text" class="input">
+            <input placeholder="username" v-model="pageData.loginForm.username" type="text" class="input">
             <p class="err-view">
             </p>
           </div>

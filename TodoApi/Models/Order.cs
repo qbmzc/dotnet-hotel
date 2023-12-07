@@ -8,7 +8,7 @@ public class Order
     public string? Status { get; set; }
     public string? OrderTime { get; set; }
     public string? PayTime { get; set; }
-    public string? UserId { get; set; }
+    public long? UserId { get; set; }
     //RoomId
     public string? ThingId { get; set; }
     public string? Count { get; set; }

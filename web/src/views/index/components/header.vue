@@ -79,7 +79,6 @@
 </template>
 
 <script setup lang="ts">
-import {listApi} from '/@/api/notice'
 import {useUserStore} from "/@/store";
 import logoImage from '/@/assets/images/k-logo.png';
 import SearchIcon from '/@/assets/images/search-icon.svg';
@@ -98,19 +97,19 @@ let msgVisible = ref(false)
 let msgData = ref([] as any)
 
 onMounted(()=>{
-  getMessageList()
+  // getMessageList()
 })
 
-const getMessageList = ()=> {
-  loading.value = true
-  listApi({}).then(res => {
-    msgData.value = res.data
-    loading.value = false
-  }).catch(err => {
-    console.log(err)
-    loading.value = false
-  })
-}
+// const getMessageList = ()=> {
+//   loading.value = true
+//   listApi({}).then(res => {
+//     msgData.value = res.data
+//     loading.value = false
+//   }).catch(err => {
+//     console.log(err)
+//     loading.value = false
+//   })
+// }
 const search = () => {
   const keyword = keywordRef.value.value
   if (route.name === 'search') {

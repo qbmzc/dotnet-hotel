@@ -28,6 +28,15 @@
             >
               <a-button type="primary" size="small" style="margin-right: 24px;">Cancel</a-button>
             </a-popconfirm>
+            <a-popconfirm
+              v-if="item.status==='1'"
+              ok-text="Yes"
+              cancel-text="No"
+              @confirm="handleToPay(item)"
+            >
+              <a-button type="primary" size="small" style="margin-right: 24px;">ToPay</a-button>
+            </a-popconfirm>
+            
             <span class="text">OrderStatus</span>
             <span class="state">{{item.status==='1'? 'Pending': item.status === '2'? 'Paid':'Canceled'}}</span>
           </div>
@@ -43,7 +52,7 @@
                 </div>
                 <div class="flex-between flex-center flex-view">
                   <span class="type"></span>
-                  <span class="price">¥{{item.price}}</span>
+                  <span class="price">${{item.price}}</span>
                 </div>
               </div>
             </div>
@@ -76,7 +85,7 @@
 <script setup>
 import {message} from "ant-design-vue";
 import {getFormatTime} from '/@/utils/'
-import {userOrderListApi} from '/@/api/order'
+import {payUserOrderApi, userOrderListApi} from '/@/api/order'
 import {cancelUserOrderApi} from '/@/api/order'
 import {BASE_URL} from "/@/store/constants";
 import {useUserStore} from "/@/store";
@@ -113,7 +122,8 @@ const getOrderList= ()=> {
     res.data.forEach((item, index) => {
       if (item.cover) {
         // item.cover = BASE_URL + '/api/staticfiles/image/' + item.cover
-        item.cover = 'data:image/jpeg;base64,' + item.cover
+        item.cover = item.cover
+        console.log(item.cover)
       }
     })
     orderData.value = res.data
@@ -130,6 +140,16 @@ const handleDetail =(thingId) =>{
 }
 const handleCancel =(item)=> {
   cancelUserOrderApi({
+    id: item.id
+  }).then(res => {
+    message.success('Success')
+    getOrderList()
+  }).catch(err => {
+    message.error(err.msg || 'Failed')
+  })
+}
+const handleToPay =(item)=> {
+  payUserOrderApi({
     id: item.id
   }).then(res => {
     message.success('Success')

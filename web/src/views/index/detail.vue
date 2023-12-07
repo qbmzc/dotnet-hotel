@@ -30,48 +30,6 @@
                 </button>
               </div>
             </div>
-            <div class="thing-counts hidden-sm">
-              <div class="count-item flex-view pointer" @click="addToWish()">
-                <div class="count-img">
-                  <img :src="WantIcon">
-                </div>
-                <div class="count-box flex-view">
-                  <div class="count-text-box">
-                    <span class="count-title">Like</span>
-                  </div>
-                  <div class="count-num-box">
-                    <span class="num-text">{{ detailData.wishCount }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="count-item flex-view pointer" @click="collect()">
-                <div class="count-img">
-                  <img :src="RecommendIcon">
-                </div>
-                <div class="count-box flex-view">
-                  <div class="count-text-box">
-                    <span class="count-title">Collect</span>
-                  </div>
-                  <div class="count-num-box">
-                    <span class="num-text">{{ detailData.collectCount }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="count-item flex-view" @click="share()">
-                <div class="count-img">
-                  <img :src="ShareIcon">
-                </div>
-                <div class="count-box flex-view">
-                  <div class="count-text-box">
-                    <span class="count-title">Share</span>
-                  </div>
-                  <div class="count-num-box">
-                    <span class="num-text"></span>
-                    <img :src="WeiboShareIcon" class="mg-l">
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -174,9 +132,6 @@ import {
   detailApi,
   listApi as listThingList,
 } from '/@/api/thing'
-import {listThingCommentsApi, createApi as createCommentApi, likeApi} from '/@/api/comment'
-import {wishApi} from '/@/api/thingWish'
-import {collectApi} from '/@/api/thingCollect'
 import {BASE_URL} from "/@/store/constants";
 import {useRoute, useRouter} from "vue-router/dist/vue-router";
 import {useUserStore} from "/@/store";
@@ -204,7 +159,6 @@ onMounted(()=>{
   thingId.value = route.query.id.trim()
   getThingDetail()
   getRecommendThing()
-  getCommentList()
 })
 
 const selectTab =(index)=> {
@@ -221,37 +175,37 @@ const getThingDetail =()=> {
     message.error('failed')
   })
 }
-const addToWish =()=> {
-  let userId = userStore.user_id
-  if (userId) {
-    wishApi({thingId: thingId.value, userId: userId}).then(res => {
-      message.success(res.msg)
-      getThingDetail()
-    }).catch(err => {
-      console.log('failed')
-    })
-  } else {
-    message.warn('please log in first')
-  }
-}
-const collect =()=> {
-  let userId = userStore.user_id
-  if (userId) {
-    collectApi({thingId: thingId.value, userId: userId}).then(res => {
-      message.success(res.msg)
-      getThingDetail()
-    }).catch(err => {
-      console.log('Collection failed')
-    })
-  } else {
-    message.warn('please log in first')
-  }
-}
-const share =()=> {
-  let content = 'Share ' + window.location.href
-  let shareHref = 'http://service.weibo.com/share/share.php?title=' + content
-  window.open(shareHref)
-}
+// const addToWish =()=> {
+//   let userId = userStore.user_id
+//   if (userId) {
+//     wishApi({thingId: thingId.value, userId: userId}).then(res => {
+//       message.success(res.msg)
+//       getThingDetail()
+//     }).catch(err => {
+//       console.log('failed')
+//     })
+//   } else {
+//     message.warn('please log in first')
+//   }
+// }
+// const collect =()=> {
+//   let userId = userStore.user_id
+//   if (userId) {
+//     collectApi({thingId: thingId.value, userId: userId}).then(res => {
+//       message.success(res.msg)
+//       getThingDetail()
+//     }).catch(err => {
+//       console.log('Collection failed')
+//     })
+//   } else {
+//     message.warn('please log in first')
+//   }
+// }
+// const share =()=> {
+//   let content = 'Share ' + window.location.href
+//   let shareHref = 'http://service.weibo.com/share/share.php?title=' + content
+//   window.open(shareHref)
+// }
 const handleOrder =(detailData)=> {
   console.log(detailData)
   const userId = userStore.user_id
@@ -283,52 +237,7 @@ const handleDetail =(item)=> {
   let text = router.resolve({name: 'detail', query: {id: item.id}})
   window.open(text.href, '_blank')
 }
-const sendComment =()=> {
-  console.log(commentRef.value)
-  let text = commentRef.value.value.trim()
-  console.log(text)
-  if (text.length <= 0) {
-    return
-  }
-  commentRef.value.value = ''
-  let userId = userStore.user_id
-  if (userId) {
-    createCommentApi({content: text, thingId: thingId.value, userId: userId}).then(res => {
-      getCommentList()
-    }).catch(err => {
-      console.log(err)
-    })
-  } else {
-    message.warn('please log in first！')
-    router.push({name: 'login'})
-  }
-}
-const like =(commentId)=> {
-  likeApi({id: commentId}).then(res => {
-    getCommentList()
-  }).catch(err => {
-    console.log(err)
-  })
-}
-const getCommentList =()=> {
-  listThingCommentsApi({thingId: thingId.value, order: order.value}).then(res => {
-    res.data.forEach(item => {
-      item.commentTime = getFormatTime(item.commentTime, true)
-    })
-    commentData.value = res.data
-  }).catch(err => {
-    console.log(err)
-  })
-}
-const sortCommentList =(sortType)=> {
-  if (sortType === 'recent') {
-    sortIndex.value = 0
-  } else {
-    sortIndex.value = 1
-  }
-  order.value = sortType
-  getCommentList()
-}
+
 
 </script>
 <style scoped lang="less">

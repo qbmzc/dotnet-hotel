@@ -19,23 +19,9 @@
             <img :src="WxPayIcon">
             <span>CreditCard</span>
           </div>
-          <!-- <div class="choose-box">
-            <img :src="AliPayIcon">
-            <span>支付宝</span>
-          </div> -->
         </div>
         <div class="tips">Please Select Any Payment Method</div>
         <button class="pay-btn pay-btn-active" @click="handlePay()">Confirm Payment</button>
-      </div>
-      <div class="pay-qr-view" style="display: none;">
-        <div class="loading-tip" style="">正在生成安全支付二维码</div>
-        <div class="qr-box" style="display: none;">
-          <div id="qrCode" class="qr">
-          </div>
-          <div class="tips">请打开微信扫一扫进行支付</div>
-          <button class="pay-finish-btn">支付完成</button>
-          <button class="back-pay-btn">选择其他支付方式</button>
-        </div>
       </div>
     </div>
   </div>
@@ -46,20 +32,23 @@
 import Header from '/@/views/index/components/header.vue'
 import {message} from "ant-design-vue";
 import WxPayIcon from '/@/assets/images/credit-card.svg';
-import AliPayIcon from '/@/assets/images/ali-pay-icon.svg';
-
+import { payUserOrderApi } from '/@/api/order'
 const route = useRoute();
 
 let ddlTime = ref()
 let amount = ref()
-
+let orderId=ref()
 onMounted(() => {
   amount.value = route.query.amount
+  orderId=route.query.orderId
   ddlTime.value = formatDate(new Date().getTime(), 'YY-MM-DD hh:mm:ss')
 })
 
 const handlePay = () => {
-  message.warn('success')
+  payUserOrderApi({id:orderId}).then(res=>{
+    message.success('success')
+  })
+  message.success('success')
 }
 const formatDate = (time, format = 'YY-MM-DD hh:mm:ss') => {
   const date = new Date(time)
