@@ -13,15 +13,3 @@ dotnet ef migrations add InitialCreate
 
 dotnet ef database update
 ```
-
-## 用户登录
-
-## 管理员内置
-
-## 用户注册
-
-## 房间列表查询
-
-## 支付
-
-## 入住与退订

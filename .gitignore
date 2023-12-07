@@ -35,3 +35,4 @@ TodoApi/bin/*
 ./vs
 TodoApi/bin/Debug/*
 .vs/dotnet-hotel/*.vsidx
+.vs/dotnet-hotel/FileContentIndex/**

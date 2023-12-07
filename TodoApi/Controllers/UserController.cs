@@ -33,7 +33,7 @@ namespace TodoApi.Controllers
 
         // GET: api/User
         [HttpGet("list")]
-        public async Task<ActionResult<APIResponse<IEnumerator<User>>>> ListUser([FromQuery]string? keyword)
+        public async Task<ActionResult<APIResponse<IEnumerator<User>>>> ListUser([FromQuery] string? keyword)
         {
             List<User>? rooms = null;
             if (keyword != null)
@@ -80,9 +80,21 @@ namespace TodoApi.Controllers
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("updateUserInfo")]
-        public async Task<ActionResult<APIResponse<User>>> PutUser(User user)
+        public async Task<ActionResult<APIResponse<User>>> PutUser([FromForm] User user, IFormFile avatarFile)
         {
+            if (avatarFile != null && avatarFile.Length > 0)
+            {
+                if (avatarFile.FileName.EndsWith(".jpg") || avatarFile.FileName.EndsWith(".jpeg") || avatarFile.FileName.EndsWith(".png"))
+                {
+                    string v = await GetBase64StringAsync(avatarFile);
+                    user.Avatar = v;
+                }
+                else
+                {
+                    return Ok(new APIResponse<Room>() { Code = 400, Msg = "Format not supported" });
+                }
 
+            }
 
             _context.Entry(user).State = EntityState.Modified;
 
@@ -103,6 +115,16 @@ namespace TodoApi.Controllers
             }
 
             return Ok(new APIResponse<User> { });
+        }
+
+          //将图片文件转换成base64字符串
+        private async Task<string> GetBase64StringAsync(IFormFile image)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await image.CopyToAsync(memoryStream);
+                return Convert.ToBase64String(memoryStream.ToArray());
+            }
         }
         //后台用户登录
         [HttpPost("login")]
@@ -215,7 +237,7 @@ namespace TodoApi.Controllers
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("userRegister")]
-        public async Task<ActionResult<APIResponse<User>>> RegUser([FromForm]User user)
+        public async Task<ActionResult<APIResponse<User>>> RegUser([FromForm] User user)
         {
             if (user.RePassword == null || user.Username == null || user.Password == null)
             {

@@ -201,14 +201,6 @@
     },
   ]);
 
-  const beforeUpload = (file: File) => {
-    // 改文件名
-    const fileName = new Date().getTime().toString() + '.' + file.type.substring(6);
-    const copyFile = new File([file], fileName);
-    console.log(copyFile);
-    modal.form.cover = copyFile;
-    return false;
-  };
 
   const fileList = ref([]);
 
@@ -376,9 +368,6 @@
         }
         if (modal.form.status) {
           formData.append('status', modal.form.status);
-        }
-        if (modal.form.cover) {
-          formData.append('cover', modal.form.cover);
         }
         if (modal.form.mobile) {
           formData.append('mobile', modal.form.mobile);

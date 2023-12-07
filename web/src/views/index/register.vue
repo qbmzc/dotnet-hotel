@@ -10,7 +10,9 @@
         <div class="common-input">
           <img :src="UserIcon" class="left-icon">
           <div class="input-view">
-            <input placeholder="username" v-model="tData.loginForm.username" type="text" required="true" class="input">
+            <input placeholder="username" v-model="tData.loginForm.username" 
+            :rules="tData.rules.username"
+            type="text" required="true" class="input">
             <p class="err-view">
             </p>
           </div>
@@ -20,7 +22,9 @@
         <div class="common-input">
           <img :src="PwdIcon" class="left-icon">
           <div class="input-view">
-            <input placeholder="password" v-model="tData.loginForm.password" type="password" required="true" class="input" />
+            <input placeholder="password" v-model="tData.loginForm.password"
+            :rules="tData.rules.password"
+            type="password" required="true" class="input" />
             <p class="err-view">
             </p>
           </div>
@@ -30,7 +34,9 @@
         <div class="common-input">
           <img :src="PwdIcon" class="left-icon">
           <div class="input-view">
-            <input placeholder="Please enter your password again" v-model="tData.loginForm.repassword" required="true" type="password"
+            <input placeholder="Please enter your password again" v-model="tData.loginForm.repassword" 
+            :rules="tData.rules.password"
+             type="password"
               class="input" />
             <p class="err-view">
             </p>
@@ -65,7 +71,15 @@ const tData = reactive({
     username: '',
     password: '',
     repassword: '',
-  }
+  },
+  rules: {  
+  // 添加一个正则表达式验证，只允许邮箱格式的用户名  
+  username: [{ required: true, message: 'Please enter your username', trigger: 'change' },
+    { required: true, pattern:  /[;:!@#$%^*+?\/<>1234567890]/g, message: 'Invalid username format', trigger: 'blur' }],  
+  // 添加一个正则表达式验证，密码必须包含至少一个大写字母、一个小写字母和一个数字  
+  password: [{ required: true, message: 'Please enter your password', trigger: 'change' },
+  { required: true, pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, message: 'Password must contain at least one uppercase letter, one lowercase letter and one number', trigger: 'blur' }]  
+}
 })
 
 

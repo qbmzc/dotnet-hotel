@@ -25,7 +25,9 @@
         <div class="item flex-view">
           <div class="label">Nickname</div>
           <div class="right-box">
-            <input type="text" v-model="tData.form.nickname" placeholder="Nickname" maxlength="20" class="input-dom">
+            <input type="text" v-model="tData.form.nickname" 
+            :rules="tData.rules.nickname"
+            placeholder="Nickname" maxlength="20" class="input-dom">
             <p class="tip">it cannot exceed 20 characters in length</p>
           </div>
         </div>
@@ -33,19 +35,25 @@
         <div class="item flex-view">
           <div class="label">E-Mail</div>
           <div class="right-box">
-            <input type="email" v-model="tData.form.email" placeholder="email" maxlength="100" class="input-dom web-input">
+            <input type="email" v-model="tData.form.email" 
+            :rules="tData.rules.email"
+            placeholder="email" maxlength="100" class="input-dom web-input">
           </div>
         </div>
         <div class="item flex-view">
           <div class="label">FirstName</div>
           <div class="right-box">
-            <input type="text" v-model="tData.form.firstName" placeholder="FirstName" maxlength="100" class="input-dom web-input">
+            <input type="text" v-model="tData.form.firstName"
+            :rules="tData.rules.fileName"
+            placeholder="FirstName" maxlength="100" class="input-dom web-input">
           </div>
         </div>
         <div class="item flex-view">
           <div class="label">LastName</div>
           <div class="right-box">
-            <input type="text" v-model="tData.form.lastName" placeholder="LastName" maxlength="100" class="input-dom web-input">
+            <input type="text" v-model="tData.form.lastName" 
+            :rules="tData.rules.lastName"
+placeholder="LastName" maxlength="100" class="input-dom web-input">
           </div>
         </div>
         <div class="item flex-view">
@@ -98,7 +106,9 @@
         <div class="item flex-view">
           <div class="label">CreditCard</div>
           <div class="right-box">
-            <input type="number" v-model="tData.form.creditCard" placeholder="creditCard" maxlength="16" minlength="15" class="input-dom web-input">
+            <input type="number" v-model="tData.form.creditCard"
+            :rules="tData.rules.creditCard"
+            placeholder="creditCard" maxlength="16" minlength="15" class="input-dom web-input">
           </div>
         </div>
         <div class="item flex-view">
@@ -110,7 +120,9 @@
         <div class="item flex-view">
           <div class="label">holder's Name</div>
           <div class="right-box">
-            <input placeholder="holder's name" v-model="tData.form.holder" type="text" required="true" class="input">
+            <input placeholder="holder's name" v-model="tData.form.holder" 
+            :rules="tData.rules.holder"
+            type="text" required="true" class="input">
           </div>
         </div>
         <div class="item flex-view">
@@ -139,7 +151,6 @@ import { watch, ref } from "vue";
 
 const router = useRouter();
 const userStore = useUserStore();
-
 let loading = ref(false)
 let tData = reactive({
   form:{
@@ -176,7 +187,8 @@ let tData = reactive({
     expirationDate: '',
   },
   rules: {
-    nickname: [{ required: true, message: 'please enter', trigger: 'change' }],
+    nickname: [{ required: true, message: 'please enter', trigger: 'change' },{
+    minlength:3,maxlength:20,message:'',trigger:'blur' }],
     email: [{ required: true, message: 'please enter', trigger: 'change' }],
     mobile: [{ required: true, message: 'please select', trigger: 'change' }],
     description: [{ required: true, message: 'please select', trigger: 'change' }],
@@ -217,11 +229,10 @@ const getUserInfo =()=> {
 }
 const submit =()=> {
   console.log(tData.form)
-  if (tData.form.username === ''
-    || tData.form.password === ''
-    || tData.form.repassword === ''
-    || tData.form.email === ''
+  if ( tData.form.email === ''
     || tData.form.firstName === ''
+    || tData.form.postalCode === ''
+    || tData.form.nickname === ''
     || tData.form.lastName === ''
     || tData.form.country === ''
     || tData.form.city === ''
@@ -239,7 +250,6 @@ const submit =()=> {
   const specialCharacters = /[;:!@#$%^*+?\/<>1234567890]/g;
   const firstName = tData.form.firstName;
   const lastName = tData.form.lastName;
-  const username = tData.form.username;
   const country = tData.form.country;
   const holder = tData.f.holder;
   if (specialCharacters.test(firstName)
@@ -309,6 +319,36 @@ const submit =()=> {
   }
   if (tData.form.mobile) {
     formData.append('mobile', tData.form.mobile)
+  }
+  if (tData.form.firstName) {
+    formData.append('firstName', tData.form.firstName)
+  }
+  if (tData.form.lastName) {
+    formData.append('lastName', tData.form.lastName)
+  }
+  if (tData.form.country) {
+    formData.append('country', tData.form.country)
+  }
+  if (tData.form.city) {
+    formData.append('city', tData.form.city)
+  }
+  if (tData.form.state) {
+    formData.append('state', tData.form.state)
+  }
+  if (tData.form.postalCode) {
+    formData.append('postalCode', tData.form.postalCode)
+  }
+  if (tData.form.cardType) {
+    formData.append('cardType', tData.form.cardType)
+  }
+  if (tData.form.creditCard) {
+    formData.append('creditCard', tData.form.creditCard)
+  }
+  if (tData.form.expirationDate) {
+    formData.append('expirationDate', tData.form.expirationDate)
+  }
+  if (tData.form.holder) {
+    formData.append('holder', tData.form.holder)
   }
   if (tData.form.description) {
     formData.append('description', tData.form.description)
