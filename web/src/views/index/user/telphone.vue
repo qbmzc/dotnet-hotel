@@ -4,7 +4,7 @@ defineProps({
   mobile: String
 })
 
-// defineEmits(['update:mobile'])
+defineEmits(['update:phonePrefix','update:mobile'])
 </script>
 
 <template>

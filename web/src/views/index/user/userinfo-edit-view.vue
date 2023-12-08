@@ -31,8 +31,8 @@
           <div class="item flex-view">
             <div class="label">E-Mail</div>
             <div class="right-box">
-              <input type="email" v-model="tData.form.email" :rules="tData.rules.email" placeholder="email"
-                maxlength="100" class="input-dom web-input">
+              <input type="email" pattern=".+@example\.com" v-model="tData.form.email" :rules="tData.rules.email"
+                placeholder="email" maxlength="30" class="input-dom web-input">
             </div>
           </div>
           <div class="item flex-view">
@@ -62,9 +62,9 @@
             </div>
           </div>
           <div class="item flex-view">
-            <div class="label">Mobile</div>
+            <div class="label">Mobile:{{ tData.form.phonePrefix }}</div>
             <div class="right-box">
-              <TelPhone v-model:phonePrefix="tData.form.phonePrefix" v-model:mobile="tData.form.mobile"></TelPhone>
+              <input v-model="tData.form.mobile" type="text" placeholder="mobile" class="input-dom web-input" />
             </div>
           </div>
           <div class="item flex-view">
@@ -159,7 +159,6 @@ let tData = reactive({
     avatarFile: undefined,
     nickname: undefined,
     email: undefined,
-    mobile: undefined,
     description: undefined,
     country: ref('USA'),
     city: '',
@@ -230,13 +229,6 @@ const getUserInfo = () => {
   })
 }
 
-const beforeSubmit = () => {
-
-
- 
-
-
-}
 const submit = () => {
   console.log(tData.form)
   if (tData.form.email === ''
@@ -251,6 +243,7 @@ const submit = () => {
     || tData.form.cardType === ''
     || tData.form.creditCard === ''
     || tData.form.expirationDate === ''
+    || tData.form.description === ''
     || tData.form.holder === '') {
     message.warn('Please fill in all the fields')
     return;
@@ -272,7 +265,12 @@ const submit = () => {
     ? /^(\d{5})(-|\s)?\d{4}$/
     : /^[A-VXY][0-9][A-Z]{2} ?[0-9][A-Z]{2}$/;
 
-
+  const emailRegex = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$/;
+  const email = tData.form.email;
+  if (!email || !emailRegex.test(email)) {
+    message.warn('Invalid email format!');
+    return;
+  }
 
   const phoneRegex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/; // 添加电话号码正则表达式
   const mobile = tData.form.mobile; // 获取电话号码
@@ -280,6 +278,7 @@ const submit = () => {
   const county = tData.form.country;
   const postalCode = tData.form.postalCode;
   console.log(mobile)
+  console.log(phonePrefix)
 
   if (county == 'USA' || county == 'Canada') {
     //验证美国或加拿大手机号码，其他国家请自行验证
@@ -299,7 +298,7 @@ const submit = () => {
 
   if (cardType == "American Express") {
     console.log(cardType + creditCard)
-    if (creditCard.length != 15 || !creditCard.toString().startsWith("34") || !creditCard.toString().startsWith("37")) {
+    if (creditCard.toString().length != 15 || !creditCard.toString().startsWith("34") || !creditCard.toString().startsWith("37")) {
 
       message.warn("Invalid creditCard")
       return;
@@ -308,11 +307,11 @@ const submit = () => {
   console.log("Starting code execution");
   if (cardType == "Visa") {
     console.log(cardType + creditCard)
-    console.log( creditCard.length)
-    console.log( creditCard.toString().startsWith('4'))
+    console.log(creditCard.toString().length)
+    console.log(creditCard.toString().startsWith('4'))
 
 
-    if (creditCard.length != 16 || !creditCard.toString().startsWith('4')) {
+    if (creditCard.toString().length != 16 || !creditCard.toString().startsWith('4')) {
       message.warn("Invalid creditCard")
       return;
     }
@@ -320,7 +319,7 @@ const submit = () => {
   console.log("Ending code execution");
 
   if (cardType == "MasterCard") {
-    if (creditCard.length != 16 || !creditCard.toString().startsWith("51")
+    if (creditCard.toString().length != 16 || !creditCard.toString().startsWith("51")
       || !creditCard.startsWith("52")
       || !creditCard.startsWith("53")
       || !creditCard.startsWith("54")

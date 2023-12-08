@@ -193,7 +193,7 @@ const columns = reactive([
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
-    customRender: ({ text, record, index, column }) => text === '0' ? '上架' : '下架'
+    customRender: ({ text, record, index, column }) => text === '0' ? 'Shelves' : 'OffShelf'
   },
   {
     title: 'Action',

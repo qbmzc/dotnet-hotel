@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj": {}
+    "D:\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj": {}
   },
   "projects": {
-    "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj": {
+    "D:\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj",
+        "projectUniqueName": "D:\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj",
         "projectName": "TodoApi",
-        "projectPath": "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj",
-        "packagesPath": "C:\\Users\\yu\\.nuget\\packages\\",
-        "outputPath": "D:\\Cong\\Space\\dotnet-hotel\\TodoApi\\obj\\",
+        "projectPath": "D:\\Space\\dotnet-hotel\\TodoApi\\TodoApi.csproj",
+        "packagesPath": "C:\\Users\\qbmzc\\.nuget\\packages\\",
+        "outputPath": "D:\\Space\\dotnet-hotel\\TodoApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\yu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\qbmzc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
