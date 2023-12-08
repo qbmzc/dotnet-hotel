@@ -20,6 +20,7 @@
 
 export function getFormatTime(dateTime,flag) {
   if(dateTime != null ) {
+    console.log(dateTime)
     //若传入的dateTime为字符串类型，需要进行转换成数值，若不是无需下面注释代码
     var time = parseInt(dateTime)
     var date = new Date(time);

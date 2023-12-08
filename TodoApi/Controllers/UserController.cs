@@ -163,7 +163,7 @@ namespace TodoApi.Controllers
                 return Ok(new APIResponse<User> { Code = 404, Msg = "user is not found" });
             }
 
-            if(user.Role!="0"){
+            if(!responseUser.Role.Equals("3")){
                 return Ok(new APIResponse<User>{Code=413,Msg="forbidden"});
             }
             responseUser.Password = null;
@@ -210,7 +210,7 @@ namespace TodoApi.Controllers
 #pragma warning restore CS8604 // 引用类型参数可能为 null。
             user.Password = encryptPwd;
             user.Token = encryptPwd;
-            user.Status = "0";
+            user.Status = "3";
             _context.User.Add(user);
             await _context.SaveChangesAsync();
 

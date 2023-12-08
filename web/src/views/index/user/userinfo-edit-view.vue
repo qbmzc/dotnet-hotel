@@ -274,7 +274,7 @@ const submit = () => {
 
 
 
-  const phoneRegex = /^(\(\d{3}\)|\d{3})\d{3}-\d{4}$/; // 添加电话号码正则表达式
+  const phoneRegex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/; // 添加电话号码正则表达式
   const mobile = tData.form.mobile; // 获取电话号码
   const phonePrefix = tData.form.phonePrefix; // 获取电话号码
   const county = tData.form.country;
@@ -299,7 +299,7 @@ const submit = () => {
 
   if (cardType == "American Express") {
     console.log(cardType + creditCard)
-    if (creditCard.length != 15 || !creditCard.startsWith("34") || !creditCard.startsWith("37")) {
+    if (creditCard.length != 15 || !creditCard.toString().startsWith("34") || !creditCard.toString().startsWith("37")) {
 
       message.warn("Invalid creditCard")
       return;
@@ -308,8 +308,11 @@ const submit = () => {
   console.log("Starting code execution");
   if (cardType == "Visa") {
     console.log(cardType + creditCard)
+    console.log( creditCard.length)
+    console.log( creditCard.toString().startsWith('4'))
 
-    if (creditCard.length != 16 || !creditCard.startsWith("4")) {
+
+    if (creditCard.length != 16 || !creditCard.toString().startsWith('4')) {
       message.warn("Invalid creditCard")
       return;
     }
@@ -317,7 +320,7 @@ const submit = () => {
   console.log("Ending code execution");
 
   if (cardType == "MasterCard") {
-    if (creditCard.length != 16 || !creditCard.startsWith("51")
+    if (creditCard.length != 16 || !creditCard.toString().startsWith("51")
       || !creditCard.startsWith("52")
       || !creditCard.startsWith("53")
       || !creditCard.startsWith("54")

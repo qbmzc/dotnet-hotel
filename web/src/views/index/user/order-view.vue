@@ -16,7 +16,7 @@
             <span class="text">OrderNubber</span>
             <span class="num mg-4">#</span>
             <span class="num">{{item.orderNumber}}</span>
-            <span class="time">{{getFormatTime(item.orderTime, true)}}</span>
+            <span class="time">{{item.orderTime}}</span>
           </div>
           <div class="right">
             <a-popconfirm

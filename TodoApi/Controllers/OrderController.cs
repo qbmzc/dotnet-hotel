@@ -36,12 +36,12 @@ namespace TodoApi.Controllers
             List<Order>? orders = null;
             if (status == null)
             {
-                orders = await _context.Order.Where(o => o.UserId == userId).ToListAsync();
+                orders = await _context.Order.Where(o => o.UserId == userId).OrderByDescending(o=>o.OrderTime).ToListAsync();
 
             }
             else
             {
-                orders = await _context.Order.Where(o => o.UserId == userId && o.Status == status).ToListAsync();
+                orders = await _context.Order.Where(o => o.UserId == userId && o.Status == status).OrderByDescending(o=>o.OrderTime).ToListAsync();
 
             }
 
