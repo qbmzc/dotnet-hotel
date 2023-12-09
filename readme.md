@@ -4,7 +4,24 @@
 
 下载并安装Visual Studio 2022,或使用vscode
 
-安装.Net SDK8.0
+安装.Net SDK8.0，安装配置环境并验证
+
+```bash
+dotnet --version
+
+# 输出版本信息
+# 8.0.100
+```
+
+## 安装node.js并验证
+
+```bash
+npm --version
+```
+
+## clone代码并导入VS
+
+
 
 跨域配置
 
